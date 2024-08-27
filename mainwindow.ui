@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">stylesheet.qss</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
@@ -22,6 +25,15 @@
       <width>801</width>
       <height>601</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
     </property>
     <property name="currentIndex">
      <number>1</number>
@@ -39,82 +51,190 @@
      </widget>
     </widget>
     <widget class="QWidget" name="settings_page">
-     <widget class="QLabel" name="label">
+     <widget class="QWidget" name="">
       <property name="geometry">
        <rect>
-        <x>230</x>
-        <y>270</y>
-        <width>63</width>
-        <height>20</height>
+        <x>240</x>
+        <y>120</y>
+        <width>311</width>
+        <height>305</height>
        </rect>
       </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-     <widget class="QWidget" name="layoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>460</x>
-        <y>150</y>
-        <width>86</width>
-        <height>236</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="settings_page_layout">
        <item>
-        <widget class="QSlider" name="horizontalSlider_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+        <widget class="QLabel" name="resumeLabel">
+         <property name="text">
+          <string>If you are in game press settings key to resume</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_7">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_8">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_9">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_10">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_11">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_12">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="setttings_page_sublayout">
+         <item>
+          <layout class="QHBoxLayout" name="settingsLayout">
+           <item>
+            <layout class="QVBoxLayout" name="settingsLabelLayout">
+             <item>
+              <widget class="QLabel" name="volume">
+               <property name="text">
+                <string>Volume</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="settings">
+               <property name="text">
+                <string>Settings</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="pause">
+               <property name="text">
+                <string>Pause game</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="mvUp">
+               <property name="text">
+                <string>Move up</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="mvLeft">
+               <property name="text">
+                <string>Move left</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="mvDown">
+               <property name="text">
+                <string>Move down</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="mvRight">
+               <property name="text">
+                <string>Move right</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="settingsButtonsLayout">
+             <item>
+              <widget class="QSlider" name="volumeSLider">
+               <property name="styleSheet">
+                <string/>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="settingsBinder">
+               <property name="cursor">
+                <cursorShape>OpenHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pauseBinder">
+               <property name="cursor">
+                <cursorShape>OpenHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="mvUpBinder">
+               <property name="cursor">
+                <cursorShape>OpenHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="mvLeftBinder">
+               <property name="cursor">
+                <cursorShape>OpenHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="mvDownBinder">
+               <property name="cursor">
+                <cursorShape>OpenHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true"/>
+               </property>
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="mvRightBinder">
+               <property name="cursor">
+                <cursorShape>ArrowCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string/>
+               </property>
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QPushButton" name="backButton">
+           <property name="text">
+            <string>Back to main menu</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="welcome_page">
+     <property name="styleSheet">
+      <string notr="true">stylesheet.qss</string>
+     </property>
      <widget class="QPushButton" name="startGameButton">
       <property name="geometry">
        <rect>

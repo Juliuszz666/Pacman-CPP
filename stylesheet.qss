@@ -1,0 +1,95 @@
+/* General Styling */
+QWidget {
+    background-color: #1E1E2F; /* Dark blue background for all widgets */
+    color: #FFFFFF;            /* White text color */
+    font-family: Arial, sans-serif; /* Clean, modern font */
+    font-size: 12px;           /* Base font size */
+    padding: 5px;
+}
+
+/* PushButton Styling */
+QPushButton {
+    background-color: #3A3A5F; /* Blue-gray background */
+    color: #FFFFFF;            /* White text */
+    border-radius: 5px;        /* Rounded corners */
+    border: 1px solid #565680; /* Subtle border for a defined button */
+}
+
+QPushButton:hover {
+    background-color: #4A4A7F; /* Slightly lighter on hover */
+}
+
+QPushButton:pressed {
+    background-color: #2A2A4F; /* Darker when pressed */
+    border: 1px solid #7070A0; /* Light border when pressed */
+}
+
+QPushButton:disabled {
+    background-color: #2A2A3F; /* Darker background when disabled */
+    color: #7F7F9F;            /* Light gray text when disabled */
+    border: 1px solid #4A4A5F; /* Dull border when disabled */
+}
+
+/* LineEdit Styling */
+QLineEdit {
+    background-color: #2E2E3F; /* Slightly lighter than main background */
+    color: #FFFFFF;            /* White text */
+    border: 1px solid #4A4A6F; /* Darker border */
+    padding: 5px;
+    border-radius: 3px;
+}
+
+QLineEdit:focus {
+    border: 1px solid #6A6A9F; /* Highlight border on focus */
+}
+
+/* QLabel Styling */
+QLabel {
+    color: #E0E0FF; /* Softer white for labels */
+    font-size: 12px;
+}
+
+/* QCheckBox Styling */
+QCheckBox {
+    color: #FFFFFF;
+    padding: 3px;
+}
+
+QCheckBox::indicator {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    border: 1px solid #4A4A6F;
+    background-color: #2A2A4F;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #3A3A7F; /* Blue when checked */
+    border: 1px solid #7070A0;
+}
+
+/* QComboBox Styling */
+QComboBox {
+    background-color: #2E2E3F;
+    color: #FFFFFF;
+    border: 1px solid #4A4A6F;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+QComboBox::drop-down {
+    border-left: 1px solid #4A4A6F;
+    background-color: #3A3A5F;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #2E2E3F;
+    border: 1px solid #4A4A6F;
+    color: #FFFFFF;
+    selection-background-color: #4A4A7F; /* Highlight color for selected items */
+}
+
+#resumeLabel {
+    qproperty-alignment: 'AlignCenter';
+    font-size: 14px;
+}
