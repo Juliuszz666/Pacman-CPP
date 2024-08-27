@@ -8,11 +8,12 @@
 
 void MainWindow::connectButtons()
 {
+    /* MENU BUTTONS */
     connect(ui->startGameButton, &QPushButton::clicked, this, &MainWindow::startButtonClicked);
     connect(ui->quitButton, &QPushButton::clicked, this, &MainWindow::quitButtonClicked);
     connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::settingsButtonClicked);
     connect(ui->backButton, &QPushButton::clicked, this, &MainWindow::backButtonClicked);
-
+    /* BINDING BUTTONS */
     connect(ui->mvDownBinder, &QPushButton::clicked, this, &MainWindow::bindKey);
     connect(ui->mvUpBinder, &QPushButton::clicked, this, &MainWindow::bindKey);
     connect(ui->mvLeftBinder, &QPushButton::clicked, this, &MainWindow::bindKey);
@@ -23,12 +24,18 @@ void MainWindow::connectButtons()
 
 void MainWindow::setUpButtonActions()
 {
-    buttonActions.insert(ui->mvDownBinder, "MVDOWN");
-    buttonActions.insert(ui->mvUpBinder, "MVUP");
-    buttonActions.insert(ui->mvLeftBinder, "MVLEFT");
-    buttonActions.insert(ui->mvRightBinder, "MVRIGHT");
-    buttonActions.insert(ui->pauseBinder, "PAUSE");
-    buttonActions.insert(ui->settingsBinder, "SETTINGS");
+    buttonActions.insert(ui->mvDownBinder, MVDOWN);
+    ui->mvDownBinder->setText(QKeySequence(keyBindings[MVDOWN]).toString());
+    buttonActions.insert(ui->mvUpBinder, MVUP);
+    ui->mvUpBinder->setText(QKeySequence(keyBindings[MVUP]).toString());
+    buttonActions.insert(ui->mvLeftBinder, MVLEFT);
+    ui->mvLeftBinder->setText(QKeySequence(keyBindings[MVLEFT]).toString());
+    buttonActions.insert(ui->mvRightBinder, MVRIGHT);
+    ui->mvRightBinder->setText(QKeySequence(keyBindings[MVRIGHT]).toString());
+    buttonActions.insert(ui->pauseBinder, PAUSE);
+    ui->pauseBinder->setText(QKeySequence(keyBindings[PAUSE]).toString());
+    buttonActions.insert(ui->settingsBinder, SETTINGS);
+    ui->settingsBinder->setText(QKeySequence(keyBindings[SETTINGS]).toString());
 }
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -37,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    keyBindings = defaultBindings;
     setUpButtonActions();
 
     scene = new QGraphicsScene();
@@ -89,7 +97,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     if(currentButton)
     {
         int key = event->key();
-        QString action = buttonActions[currentButton];
+        keyActions action = buttonActions[currentButton];
         for(auto it = keyBindings.constBegin(); it != keyBindings.constEnd(); ++it)
         {
             if(it.value() == key)
@@ -99,7 +107,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
                 return;
             }
         }
-        QMessageBox::critical(nullptr, "Chuj", QString::number(key));
         keyBindings[action] = key;
         currentButton->setText(QKeySequence(key).toString());
         currentButton = nullptr;

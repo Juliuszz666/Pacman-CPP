@@ -15,6 +15,18 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+#define KEY_ESCAPE 16777216
+
+enum keyActions
+{
+    MVUP,
+    MVLEFT,
+    MVDOWN,
+    MVRIGHT,
+    PAUSE,
+    SETTINGS
+};
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
@@ -35,11 +47,16 @@ private slots:
     //void gameLoop();
 
 private:
-    QMap<QPushButton*, QString> buttonActions;
-    QMap<QString, int> keyBindings;
-    const QMap<QString, int> defaultBindings =
+    QMap<QPushButton*, keyActions> buttonActions;
+    QMap<keyActions, int> keyBindings;
+    const QMap<keyActions, int> defaultBindings =
     {
-        {}, {}, {}, {}, {}, {}
+        {MVUP, 'W'},
+        {MVLEFT, 'A'},
+        {MVDOWN, 'S'},
+        {MVRIGHT, 'D'},
+        {SETTINGS, KEY_ESCAPE},
+        {PAUSE, 'P'}
     };
 
     void connectButtons();
