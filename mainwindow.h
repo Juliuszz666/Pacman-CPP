@@ -31,11 +31,16 @@ private slots:
     void quitButtonClicked();
     void settingsButtonClicked();
     void backButtonClicked();
+    void setUpButtonActions();
     //void gameLoop();
 
 private:
     QMap<QPushButton*, QString> buttonActions;
     QMap<QString, int> keyBindings;
+    const QMap<QString, int> defaultBindings =
+    {
+        {}, {}, {}, {}, {}, {}
+    };
 
     void connectButtons();
 

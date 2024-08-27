@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <QMessageBox>
 
 #define GAME_PAGE 0
 #define SETTINGS_PAGE 1
@@ -20,11 +21,23 @@ void MainWindow::connectButtons()
     connect(ui->settingsBinder, &QPushButton::clicked, this, &MainWindow::bindKey);
 }
 
+void MainWindow::setUpButtonActions()
+{
+    buttonActions.insert(ui->mvDownBinder, "MVDOWN");
+    buttonActions.insert(ui->mvUpBinder, "MVUP");
+    buttonActions.insert(ui->mvLeftBinder, "MVLEFT");
+    buttonActions.insert(ui->mvRightBinder, "MVRIGHT");
+    buttonActions.insert(ui->pauseBinder, "PAUSE");
+    buttonActions.insert(ui->settingsBinder, "SETTINGS");
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    setUpButtonActions();
 
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
@@ -67,7 +80,7 @@ void MainWindow::bindKey()
     currentButton = qobject_cast<QPushButton*>(sender());
     if(currentButton)
     {
-        currentButton->text() = "Press key...";
+        currentButton->setText("Press key...");
     }
 }
 
@@ -77,6 +90,16 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     {
         int key = event->key();
         QString action = buttonActions[currentButton];
+        for(auto it = keyBindings.constBegin(); it != keyBindings.constEnd(); ++it)
+        {
+            if(it.value() == key)
+            {
+                keyBindings[action] = defaultBindings[action];
+                currentButton->setText(QKeySequence(defaultBindings[action]).toString());
+                return;
+            }
+        }
+        QMessageBox::critical(nullptr, "Chuj", QString::number(key));
         keyBindings[action] = key;
         currentButton->setText(QKeySequence(key).toString());
         currentButton = nullptr;
