@@ -6,6 +6,8 @@
 #include <QGraphicsRectItem>
 #include <QKeyEvent>
 #include <QStackedWidget>
+#include <QMap>
+#include <QPushButton>
 class PacMan;
 class Ghost;
 
@@ -20,15 +22,21 @@ public:
     ~MainWindow();
 
 protected:
-    //void keyPressEvent(QKeyEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
+    void bindKey();
+
     void startButtonClicked();
     void quitButtonClicked();
     void settingsButtonClicked();
+    void backButtonClicked();
     //void gameLoop();
 
 private:
+    QMap<QPushButton*, QString> buttonActions;
+    QMap<QString, int> keyBindings;
+
     void connectButtons();
 
     Ui::MainWindow *ui;
@@ -36,6 +44,7 @@ private:
     PacMan *pacman;
     Ghost **ghosts;
     QTimer *timer;
+    QPushButton* currentButton;
 };
 
 #endif // MAINWINDOW_H
