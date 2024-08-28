@@ -9,6 +9,14 @@
 #include <QMap>
 #include <QStack>
 #include <QPushButton>
+#include <QMessageBox>
+#include <QSet>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+
+
 class PacMan;
 class Ghost;
 
@@ -17,6 +25,8 @@ namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 #define KEY_ESCAPE 16777216
+#define MAP_WIDTH 30
+#define MAP_HEIGHT 20
 
 enum keyActions
 {
@@ -51,6 +61,7 @@ private slots:
     //void gameLoop();
 
 private:
+    int mapGrid[MAP_WIDTH][MAP_HEIGHT];
     QMap<QPushButton*, keyActions> buttonActions;
     QMap<keyActions, int> keyBindings;
     QStack<int> pageIndexStack;
@@ -68,6 +79,8 @@ private:
     void connectButtons();
     void pushPage(int index);
     void popPage();
+
+    void loadLevelsJson();
 
     Ui::MainWindow *ui;
     QGraphicsScene *scene;

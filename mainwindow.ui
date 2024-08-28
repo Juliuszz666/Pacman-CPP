@@ -36,22 +36,11 @@
      <enum>QFrame::NoFrame</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
-    <widget class="QWidget" name="game_page">
-     <widget class="QGraphicsView" name="graphicsView">
-      <property name="geometry">
-       <rect>
-        <x>-20</x>
-        <y>-19</y>
-        <width>821</width>
-        <height>621</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
+    <widget class="QWidget" name="game_page"/>
     <widget class="QWidget" name="settings_page">
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>240</x>

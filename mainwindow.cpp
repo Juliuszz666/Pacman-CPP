@@ -1,11 +1,36 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include <QMessageBox>
-#include <QSet>
 
 #define GAME_PAGE 0
 #define SETTINGS_PAGE 1
 #define WELCOME_PAGE 2
+#define LEVELS_FILE ":/levels.json"
+
+void criticalQuit(const char * msg)
+{
+    QMessageBox::critical(nullptr, "Critical error occured", msg);
+    QCoreApplication::quit();
+    exit(1);
+}
+
+void MainWindow::loadLevelsJson()
+{
+    QFile jsonFile(LEVELS_FILE);
+    if (!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        criticalQuit("Couldn't load level. Program will be terminated");
+    }
+    QByteArray fileData = jsonFile.readAll();
+    jsonFile.close();
+
+    QJsonDocument document = QJsonDocument::fromJson(fileData);
+    if (!document.isObject()) {
+        criticalQuit("Couldn't load level. Program will be terminated");
+    }
+
+    QJsonObject jsonObj = document.object();
+    QJsonArray mazeArray = jsonObj["lvl_001"].toArray();
+}
 
 void MainWindow::checkDuplicates()
 {
@@ -79,19 +104,13 @@ MainWindow::MainWindow(QWidget *parent) :
     currentButton(nullptr)
 {
     ui->setupUi(this);
-
     keyBindings = defaultBindings;
     setUpButtonActions();
 
-    scene = new QGraphicsScene();
-    ui->graphicsView->setScene(scene);
-
-    QGraphicsRectItem *rect = new QGraphicsRectItem(0, 0, 100, 100);
-    rect->setBrush(QBrush(Qt::blue));
-    scene->addItem(rect);
     pageIndexStack.push(WELCOME_PAGE);
     ui->stackedWidget->setCurrentIndex(WELCOME_PAGE);
     connectButtons();
+    loadLevel();
 
 }
 
