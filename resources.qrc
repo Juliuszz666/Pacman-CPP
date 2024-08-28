@@ -2,5 +2,12 @@
     <qresource prefix="/">
         <file>stylesheet.qss</file>
         <file>levels.json</file>
+        <file>img/pacman.png</file>
+        <file>img/blinky.png</file>
+	<file>img/pinky.png</file>
+	<file>img/inky.png</file>
+	<file>img/clyde.png</file>
+	<file>img/power_up.png</file>
+	<file>img/food.png</file>
     </qresource>
 </RCC>

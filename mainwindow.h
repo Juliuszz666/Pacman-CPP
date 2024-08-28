@@ -61,7 +61,8 @@ private slots:
     //void gameLoop();
 
 private:
-    int mapGrid[MAP_WIDTH][MAP_HEIGHT];
+    int currentLevel;
+    int mapGrid[MAP_HEIGHT][MAP_WIDTH];
     QMap<QPushButton*, keyActions> buttonActions;
     QMap<keyActions, int> keyBindings;
     QStack<int> pageIndexStack;
@@ -79,8 +80,11 @@ private:
     void connectButtons();
     void pushPage(int index);
     void popPage();
+    void initializeGrid(const QJsonArray &jsonArr);
 
-    void loadLevelsJson();
+    void loadLevel(int lvl_number);
+
+    void drawMapGrid();
 
     Ui::MainWindow *ui;
     QGraphicsScene *scene;

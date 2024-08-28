@@ -38,7 +38,18 @@
     <property name="currentIndex">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="game_page"/>
+    <widget class="QWidget" name="game_page">
+     <widget class="QGraphicsView" name="graphicsView">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>150</y>
+        <width>800</width>
+        <height>450</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="settings_page">
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">

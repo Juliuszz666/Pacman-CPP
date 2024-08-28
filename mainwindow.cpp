@@ -4,6 +4,10 @@
 #define GAME_PAGE 0
 #define SETTINGS_PAGE 1
 #define WELCOME_PAGE 2
+#define MAP_BLANK 0
+#define MAP_WALL 1
+#define MAP_POWER_UP 2
+#define MAP_FOOD 3
 #define LEVELS_FILE ":/levels.json"
 
 void criticalQuit(const char * msg)
@@ -13,7 +17,71 @@ void criticalQuit(const char * msg)
     exit(1);
 }
 
-void MainWindow::loadLevelsJson()
+void MainWindow::drawMapGrid()
+{
+    scene = new QGraphicsScene(this);
+
+    const int cellSize = 20;
+
+    for (int i = 0; i < MAP_HEIGHT; ++i)
+    {
+        for (int j = 0; j < MAP_WIDTH; ++j)
+        {
+            int value = mapGrid[i][j];
+
+            QColor color;
+            switch (value) {
+            case MAP_BLANK:
+                color = Qt::white;
+                break;
+            case MAP_WALL:
+                color = Qt::black;
+                break;
+            case MAP_POWER_UP:
+                color = Qt::yellow;
+                break;
+            case MAP_FOOD:
+                color = Qt::green;
+                break;
+            default:
+                criticalQuit("Level file corrupted");
+                break;
+            }
+
+            QGraphicsRectItem *rect = new QGraphicsRectItem(j * cellSize, i * cellSize, cellSize, cellSize);
+
+            rect->setBrush(QBrush(color));
+            rect->setPen(QPen(Qt::NoPen));
+
+            scene->addItem(rect);
+        }
+    }
+
+    // Set the scene to the QGraphicsView
+    ui->graphicsView->setScene(scene);
+
+    // Optional: Adjust the view to show the entire grid
+    ui->graphicsView->setSceneRect(0, 0, MAP_WIDTH * cellSize, MAP_HEIGHT * cellSize);
+    ui->graphicsView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
+}
+void MainWindow::initializeGrid(const QJsonArray &jsonArr)
+{
+    if (jsonArr.size() != MAP_HEIGHT || jsonArr[0].toArray().size() != MAP_WIDTH)
+    {
+        criticalQuit("File with level corrupted");
+    }
+    for (int i = 0; i < MAP_HEIGHT; ++i)
+    {
+        QJsonArray row = jsonArr[i].toArray();
+        for (int j = 0; j < MAP_WIDTH; ++j)
+        {
+            mapGrid[i][j] = row[j].toInt();
+        }
+    }
+}
+
+
+void MainWindow::loadLevel(int level_number)
 {
     QFile jsonFile(LEVELS_FILE);
     if (!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -29,7 +97,8 @@ void MainWindow::loadLevelsJson()
     }
 
     QJsonObject jsonObj = document.object();
-    QJsonArray mazeArray = jsonObj["lvl_001"].toArray();
+    QJsonArray gridArray = jsonObj[QString("lvl_%1").arg(level_number)].toArray();
+    initializeGrid(gridArray);
 }
 
 void MainWindow::checkDuplicates()
@@ -101,17 +170,20 @@ void MainWindow::setUpButtonActions()
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    currentButton(nullptr)
+    currentButton(nullptr),
+    currentLevel(1)
 {
     ui->setupUi(this);
+
     keyBindings = defaultBindings;
     setUpButtonActions();
+    connectButtons();
+
+    loadLevel(1);
+    drawMapGrid();
 
     pageIndexStack.push(WELCOME_PAGE);
     ui->stackedWidget->setCurrentIndex(WELCOME_PAGE);
-    connectButtons();
-    loadLevel();
-
 }
 
 MainWindow::~MainWindow() {
