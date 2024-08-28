@@ -64,6 +64,7 @@ private:
         {PAUSE, 'P'}
     };
 
+    void checkDuplicates();
     void connectButtons();
     void pushPage(int index);
     void popPage();

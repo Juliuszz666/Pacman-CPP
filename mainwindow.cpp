@@ -7,6 +7,25 @@
 #define SETTINGS_PAGE 1
 #define WELCOME_PAGE 2
 
+void MainWindow::checkDuplicates()
+{
+    QSet<int> checkSet;
+    for(auto element = keyBindings.constBegin(); element != keyBindings.constEnd(); ++element)
+    {
+        if(checkSet.contains(element.value()))
+        {
+            keyBindings = defaultBindings;
+            setUpButtonActions();
+            QMessageBox::critical(nullptr, "Error", "Error with key binding, restored to default");
+            return;
+        }
+        else
+        {
+            checkSet.insert(element.value());
+        }
+    }
+}
+
 void MainWindow::pushPage(int index)
 {
     pageIndexStack.push(ui->stackedWidget->currentIndex());
@@ -143,13 +162,13 @@ void MainWindow::settingsPageKeysHandling(int key)
             {
                 keyBindings[action] = defaultBindings[action];
                 currentButton->setText(QKeySequence(defaultBindings[action]).toString());
+                checkDuplicates();
                 return;
             }
         }
         keyBindings[action] = key;
         currentButton->setText(QKeySequence(key).toString());
         currentButton = nullptr;
-
     }
     else
     {
