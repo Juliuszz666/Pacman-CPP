@@ -7,6 +7,7 @@
 #include <QKeyEvent>
 #include <QStackedWidget>
 #include <QMap>
+#include <QStack>
 #include <QPushButton>
 class PacMan;
 class Ghost;
@@ -37,6 +38,9 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
+    void settingsPageKeysHandling(int key);
+    void gamePageKeysHandling(int key);
+
     void bindKey();
 
     void startButtonClicked();
@@ -49,6 +53,7 @@ private slots:
 private:
     QMap<QPushButton*, keyActions> buttonActions;
     QMap<keyActions, int> keyBindings;
+    QStack<int> pageIndexStack;
     const QMap<keyActions, int> defaultBindings =
     {
         {MVUP, 'W'},
@@ -60,6 +65,8 @@ private:
     };
 
     void connectButtons();
+    void pushPage(int index);
+    void popPage();
 
     Ui::MainWindow *ui;
     QGraphicsScene *scene;

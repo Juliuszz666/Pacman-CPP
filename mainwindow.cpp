@@ -1,10 +1,26 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include <QMessageBox>
+#include <QSet>
 
 #define GAME_PAGE 0
 #define SETTINGS_PAGE 1
 #define WELCOME_PAGE 2
+
+void MainWindow::pushPage(int index)
+{
+    pageIndexStack.push(ui->stackedWidget->currentIndex());
+    ui->stackedWidget->setCurrentIndex(index);
+}
+
+void MainWindow::popPage()
+{
+    if (!pageIndexStack.isEmpty())
+    {
+        int previousPage = pageIndexStack.pop();
+        ui->stackedWidget->setCurrentIndex(previousPage);
+    }
+}
 
 void MainWindow::connectButtons()
 {
@@ -40,7 +56,8 @@ void MainWindow::setUpButtonActions()
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    currentButton(nullptr)
 {
     ui->setupUi(this);
 
@@ -53,8 +70,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QGraphicsRectItem *rect = new QGraphicsRectItem(0, 0, 100, 100);
     rect->setBrush(QBrush(Qt::blue));
     scene->addItem(rect);
+    pageIndexStack.push(WELCOME_PAGE);
     ui->stackedWidget->setCurrentIndex(WELCOME_PAGE);
-
     connectButtons();
 
 }
@@ -65,7 +82,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::startButtonClicked()
 {
-    ui->stackedWidget->setCurrentIndex(GAME_PAGE);
+    pushPage(GAME_PAGE);
 }
 
 void MainWindow::quitButtonClicked()
@@ -75,16 +92,25 @@ void MainWindow::quitButtonClicked()
 
 void MainWindow::backButtonClicked()
 {
-    ui->stackedWidget->setCurrentIndex(WELCOME_PAGE);
+    while(pageIndexStack.top() != WELCOME_PAGE)
+    {
+        popPage();
+    }
+    popPage();
 }
 
 void MainWindow::settingsButtonClicked()
 {
-    ui->stackedWidget->setCurrentIndex(SETTINGS_PAGE);
+    pushPage(SETTINGS_PAGE);
 }
 
 void MainWindow::bindKey()
 {
+    if (currentButton)
+    {
+        keyActions action = buttonActions[currentButton];
+        currentButton->setText(QKeySequence(keyBindings[action]).toString());
+    }
     currentButton = qobject_cast<QPushButton*>(sender());
     if(currentButton)
     {
@@ -94,9 +120,22 @@ void MainWindow::bindKey()
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
+    int key = event->key();
+    switch (ui->stackedWidget->currentIndex())
+    {
+    case SETTINGS_PAGE:
+        settingsPageKeysHandling(key);
+        break;
+    case GAME_PAGE:
+        gamePageKeysHandling(key);
+        break;
+    }
+}
+
+void MainWindow::settingsPageKeysHandling(int key)
+{
     if(currentButton)
     {
-        int key = event->key();
         keyActions action = buttonActions[currentButton];
         for(auto it = keyBindings.constBegin(); it != keyBindings.constEnd(); ++it)
         {
@@ -110,5 +149,22 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         keyBindings[action] = key;
         currentButton->setText(QKeySequence(key).toString());
         currentButton = nullptr;
+
+    }
+    else
+    {
+        if(key == keyBindings[SETTINGS])
+        {
+            popPage();
+            if(ui->stackedWidget->currentIndex() != GAME_PAGE) pushPage(SETTINGS_PAGE);
+        }
+    }
+}
+
+void MainWindow::gamePageKeysHandling(int key)
+{
+    if(key == keyBindings[SETTINGS])
+    {
+        pushPage(SETTINGS_PAGE);
     }
 }
