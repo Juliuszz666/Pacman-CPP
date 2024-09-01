@@ -15,6 +15,12 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QPixmap>
+#include <QImage>
+#include <QGraphicsPixmapItem>
+#include <QtMultimedia/QMediaPlayer>
+#include <QtMultimedia/QAudioOutput>
+#include <QSlider>
 
 
 class PacMan;
@@ -58,11 +64,14 @@ private slots:
     void settingsButtonClicked();
     void backButtonClicked();
     void setUpButtonActions();
+    void setUpMusic();
     //void gameLoop();
 
 private:
     int currentLevel;
     int mapGrid[MAP_HEIGHT][MAP_WIDTH];
+    QMediaPlayer* music_player;
+    QAudioOutput* audio_output;
     QMap<QPushButton*, keyActions> buttonActions;
     QMap<keyActions, int> keyBindings;
     QStack<int> pageIndexStack;
@@ -81,6 +90,7 @@ private:
     void pushPage(int index);
     void popPage();
     void initializeGrid(const QJsonArray &jsonArr);
+    void changeVolume();
 
     void loadLevel(int lvl_number);
 

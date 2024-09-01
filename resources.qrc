@@ -9,5 +9,6 @@
 	<file>img/clyde.png</file>
 	<file>img/power_up.png</file>
 	<file>img/food.png</file>
+    <file>mp3/testmusic.mp3</file>
     </qresource>
 </RCC>

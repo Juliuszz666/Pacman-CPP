@@ -5,7 +5,7 @@ class Collectable
 {
 protected:
     int score;
-    virtual void destroySelf() = 0;
+    Collectable() = default;
     virtual ~Collectable() = 0;
 };
 

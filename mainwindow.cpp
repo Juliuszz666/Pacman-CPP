@@ -17,6 +17,46 @@ void criticalQuit(const char * msg)
     exit(1);
 }
 
+QGraphicsRectItem* setUpRect(int value, int cellSize, std::pair<int, int> pos)
+{
+    QColor color;
+
+    switch (value) {
+    case MAP_WALL:
+        color = Qt::black;
+        break;
+    case MAP_BLANK: case MAP_FOOD: case MAP_POWER_UP:
+        color = Qt::white;
+        break;
+    default:
+        criticalQuit("Level file corrupted");
+        break;
+    }
+
+    auto [i, j] = pos;
+    QGraphicsRectItem *rect = new QGraphicsRectItem(j * cellSize, i * cellSize, cellSize, cellSize);
+
+    rect->setBrush(QBrush(color));
+    rect->setPen(QPen(Qt::NoPen));
+
+    return rect;
+}
+
+QGraphicsPixmapItem * setUpCollectable(const int cellSize, std::pair<int, int> pos, const QString& filename)
+{
+    QImage img;
+    if(!img.load(filename))
+    {
+        criticalQuit("Error loading an image");
+    }
+    QPixmap loaded_img = QPixmap::fromImage(img);
+    auto [y, x] = pos;
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(loaded_img.scaled(cellSize, cellSize, Qt::KeepAspectRatio));
+    item->setPos(x * cellSize, y * cellSize);
+    return item;
+
+}
+
 void MainWindow::drawMapGrid()
 {
     scene = new QGraphicsScene(this);
@@ -29,41 +69,27 @@ void MainWindow::drawMapGrid()
         {
             int value = mapGrid[i][j];
 
-            QColor color;
+            QGraphicsRectItem* rect = setUpRect(value, cellSize, {i, j});
+            QGraphicsPixmapItem* map_item = nullptr;
+            scene->addItem(rect);
             switch (value) {
-            case MAP_BLANK:
-                color = Qt::white;
-                break;
-            case MAP_WALL:
-                color = Qt::black;
+            case MAP_FOOD:
+                map_item = setUpCollectable(cellSize, {i, j}, ":/img/food.png");
                 break;
             case MAP_POWER_UP:
-                color = Qt::yellow;
-                break;
-            case MAP_FOOD:
-                color = Qt::green;
-                break;
-            default:
-                criticalQuit("Level file corrupted");
+                map_item = setUpCollectable(cellSize, {i, j}, ":/img/power_up.png");
                 break;
             }
-
-            QGraphicsRectItem *rect = new QGraphicsRectItem(j * cellSize, i * cellSize, cellSize, cellSize);
-
-            rect->setBrush(QBrush(color));
-            rect->setPen(QPen(Qt::NoPen));
-
-            scene->addItem(rect);
+            if(map_item)
+            {
+                scene->addItem(map_item);
+            }
         }
     }
 
-    // Set the scene to the QGraphicsView
     ui->graphicsView->setScene(scene);
-
-    // Optional: Adjust the view to show the entire grid
-    ui->graphicsView->setSceneRect(0, 0, MAP_WIDTH * cellSize, MAP_HEIGHT * cellSize);
-    ui->graphicsView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
 }
+
 void MainWindow::initializeGrid(const QJsonArray &jsonArr)
 {
     if (jsonArr.size() != MAP_HEIGHT || jsonArr[0].toArray().size() != MAP_WIDTH)
@@ -135,6 +161,19 @@ void MainWindow::popPage()
     }
 }
 
+void MainWindow::setUpMusic()
+{
+    music_player->setAudioOutput(audio_output);
+    music_player->setSource(QUrl("qrc:/mp3/testmusic.mp3"));
+    music_player->play();
+}
+
+void MainWindow::changeVolume()
+{
+    qreal vol = QAudio::convertVolume(ui->volumeSlider->value() / qreal(100.0), QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale);
+    audio_output->setVolume(vol);
+}
+
 void MainWindow::connectButtons()
 {
     /* MENU BUTTONS */
@@ -149,6 +188,8 @@ void MainWindow::connectButtons()
     connect(ui->mvRightBinder, &QPushButton::clicked, this, &MainWindow::bindKey);
     connect(ui->pauseBinder, &QPushButton::clicked, this, &MainWindow::bindKey);
     connect(ui->settingsBinder, &QPushButton::clicked, this, &MainWindow::bindKey);
+    /* VOLUME SLIDER */
+    connect(ui->volumeSlider, &QSlider::valueChanged, this, &MainWindow::changeVolume);
 }
 
 void MainWindow::setUpButtonActions()
@@ -165,19 +206,29 @@ void MainWindow::setUpButtonActions()
     ui->pauseBinder->setText(QKeySequence(keyBindings[PAUSE]).toString());
     buttonActions.insert(ui->settingsBinder, SETTINGS);
     ui->settingsBinder->setText(QKeySequence(keyBindings[SETTINGS]).toString());
+    /*VOLUME SLIDER*/
+    ui->volumeSlider->setRange(0, 100);
+    ui->volumeSlider->setValue(50);
 }
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     currentButton(nullptr),
-    currentLevel(1)
+    currentLevel(1),
+    ghosts(nullptr), //temp
+    music_player(new QMediaPlayer()),
+    audio_output(new QAudioOutput()),
+    pacman(nullptr), //temp
+    timer(nullptr), //temp
+    scene(nullptr)
 {
     ui->setupUi(this);
 
     keyBindings = defaultBindings;
     setUpButtonActions();
     connectButtons();
+    setUpMusic();
 
     loadLevel(1);
     drawMapGrid();
@@ -188,6 +239,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {
     delete ui;
+    delete scene;
+    delete music_player;
+    delete audio_output;
 }
 
 void MainWindow::startButtonClicked()
