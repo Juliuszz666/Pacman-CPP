@@ -1,5 +1,6 @@
 #include "gamepage.h"
 #include "./ui_gamepage.h"
+#include "collectable.h"
 #include "shared.h"
 #include <QGraphicsRectItem>
 #include <QGraphicsPixmapItem>
@@ -56,20 +57,6 @@ QGraphicsRectItem* setUpRect(int value, int cellSize, std::pair<int, int> pos)
     return rect;
 }
 
-QGraphicsPixmapItem * setUpCollectable(const int cellSize, std::pair<int, int> pos, const QString& filename)
-{
-    QImage img;
-    if(!img.load(filename))
-    {
-        criticalQuit("Error loading an image");
-    }
-    QPixmap loaded_img = QPixmap::fromImage(img);
-    auto [y, x] = pos;
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(loaded_img.scaled(cellSize, cellSize, Qt::KeepAspectRatio));
-    item->setPos(x * cellSize, y * cellSize);
-    return item;
-
-}
 
 void GamePage::drawMapGrid()
 {
@@ -88,10 +75,10 @@ void GamePage::drawMapGrid()
             scene->addItem(rect);
             switch (value) {
             case MAP_FOOD:
-                map_item = setUpCollectable(cellSize, {i, j}, ":/img/food.png");
+                map_item = new Collectable(FOOD, 1, cellSize, {i, j});
                 break;
             case MAP_POWER_UP:
-                map_item = setUpCollectable(cellSize, {i, j}, ":/img/power_up.png");
+                map_item = new Collectable(POWER_UP, 25, cellSize, {i, j});
                 break;
             }
             if(map_item)

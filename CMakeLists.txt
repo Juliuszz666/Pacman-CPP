@@ -36,6 +36,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         gamepage.h gamepage.cpp gamepage.ui
         shared.h
         shared.cpp
+        collectable.cpp
+
 
     )
 # Define target properties for Android with Qt 6 as:
