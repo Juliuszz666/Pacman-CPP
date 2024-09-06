@@ -28,6 +28,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         exceptions.h
         entity.h
         collectable.h
+        settingspage.ui
+        settingspage.h
+        settingspage.cpp
+        gamepage.cpp
+        gamepage.h
+        gamepage.h gamepage.cpp gamepage.ui
+        shared.h
+        shared.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

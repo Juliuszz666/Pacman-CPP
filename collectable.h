@@ -1,12 +1,18 @@
 #ifndef COLLECTABLE_H
 #define COLLECTABLE_H
 
+enum collectable_type
+{
+    FOOD,
+    POWER_UP
+};
+
 class Collectable
 {
 protected:
     int score;
-    Collectable() = default;
-    virtual ~Collectable() = 0;
+    Collectable();
+    ~Collectable();
 };
 
 #endif // COLLECTABLE_H
