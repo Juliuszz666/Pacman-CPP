@@ -10,6 +10,9 @@
     <height>545</height>
    </rect>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
@@ -88,6 +91,9 @@
          <layout class="QVBoxLayout" name="settingsButtonsLayout">
           <item>
            <widget class="QSlider" name="volumeSlider">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="styleSheet">
              <string/>
             </property>
@@ -100,6 +106,9 @@
            <widget class="QPushButton" name="settingsBinder">
             <property name="cursor">
              <cursorShape>OpenHandCursor</cursorShape>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="styleSheet">
              <string/>
@@ -114,6 +123,9 @@
             <property name="cursor">
              <cursorShape>OpenHandCursor</cursorShape>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="styleSheet">
              <string/>
             </property>
@@ -126,6 +138,9 @@
            <widget class="QPushButton" name="mvUpBinder">
             <property name="cursor">
              <cursorShape>OpenHandCursor</cursorShape>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="styleSheet">
              <string/>
@@ -140,6 +155,9 @@
             <property name="cursor">
              <cursorShape>OpenHandCursor</cursorShape>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="styleSheet">
              <string/>
             </property>
@@ -153,6 +171,9 @@
             <property name="cursor">
              <cursorShape>OpenHandCursor</cursorShape>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="styleSheet">
              <string notr="true"/>
             </property>
@@ -165,6 +186,9 @@
            <widget class="QPushButton" name="mvRightBinder">
             <property name="cursor">
              <cursorShape>ArrowCursor</cursorShape>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="styleSheet">
              <string/>
@@ -180,6 +204,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="backButton">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>Back to main menu</string>
         </property>

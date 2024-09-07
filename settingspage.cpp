@@ -9,6 +9,7 @@ SettingsPage::SettingsPage(QWidget *parent, QStackedWidget* ref) :
     layout_ref(ref)
 {
     ui->setupUi(this);
+    this->setFocusPolicy(Qt::ClickFocus);
     setUpButtonActions();
     setUpMusic();
     connectButtons();

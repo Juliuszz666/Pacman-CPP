@@ -36,8 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {
     delete ui;
-    delete game_page;
-    delete settings_page;
 }
 
 void MainWindow::startButtonClicked()
