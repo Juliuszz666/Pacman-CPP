@@ -12,7 +12,4 @@ const QMap<keyActions, int> Shared::defaultBindings =
         {PAUSE, 'P'}
 };
 
-std::unique_ptr<QAudioOutput> Shared::audio_output = std::make_unique<QAudioOutput>();
-std::unique_ptr<QMediaPlayer> Shared::music_player = std::make_unique<QMediaPlayer>();
-
 QMap<keyActions, int> Shared::keyBindings = Shared::defaultBindings;

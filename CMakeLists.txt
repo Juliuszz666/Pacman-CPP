@@ -25,7 +25,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(Pacman
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        exceptions.h
+
         entity.h
         collectable.h
         settingspage.ui
@@ -37,6 +37,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         shared.h
         shared.cpp
         collectable.cpp
+        tile.h tile.cpp
+        pacman.h pacman.cpp
+
+        ghost.h ghost.cpp
+        enitity.cpp
 
 
     )

@@ -1,10 +1,11 @@
 #ifndef SETTINGSPAGE_H
 #define SETTINGSPAGE_H
+#include "shared.h"
 #include <QWidget>
 #include <QKeyEvent>
 #include <QPushButton>
 #include <QStackedWidget>
-#include "shared.h"
+#include <QtMultimedia>
 
 class MainWindow;
 
@@ -20,6 +21,8 @@ private:
     Ui::SettingsPage *ui;
     QMap<QPushButton*, keyActions> buttonActions;
     QPushButton* currentButton;
+    std::unique_ptr<QAudioOutput> audio_output;
+    std::unique_ptr<QMediaPlayer> music_player;
 
     void checkDuplicates();
     void changeVolume();

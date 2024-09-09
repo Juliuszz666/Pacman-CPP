@@ -1,10 +1,15 @@
 #include "gamepage.h"
 #include "./ui_gamepage.h"
-#include "collectable.h"
 #include "shared.h"
 #include <QGraphicsRectItem>
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QFile>
+#include <QTimer>
+
 
 
 #define MAP_BLANK 0
@@ -14,17 +19,26 @@
 #define LEVELS_FILE ":/levels.json"
 
 void criticalQuit(const char * msg);
+const int cellSize = 20;
 
 GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     QWidget(parent),
     ui(new Ui::GamePage),
     current_level(1),
-    layout_ref(ref)
+    layout_ref(ref),
+    pacman(new Pacman(cellSize, {1, 1})),
+    scene(new QGraphicsScene(this)),
+    player_timer(new QTimer(this))
 {
     ui->setupUi(this);
-
+    ui->graphicsView->setScene(scene);
     loadLevel(current_level);
     drawMapGrid();
+    scene->addItem(pacman);
+
+    player_timer->start(100);
+
+    connect(player_timer, &QTimer::timeout, pacman, &Pacman::move);
 }
 
 GamePage::~GamePage()
@@ -32,63 +46,52 @@ GamePage::~GamePage()
     delete ui;
 }
 
-QGraphicsRectItem* setUpRect(int value, int cellSize, std::pair<int, int> pos)
+std::pair<Tile*, Collectable*> processGridValue(int val, std::pair<int, int> pos)
 {
-    QColor color;
-
-    switch (value) {
-    case MAP_WALL:
-        color = Qt::black;
+    Collectable * item = nullptr;
+    Tile * tile = nullptr;
+    auto [i, j] = pos;
+    switch (val) {
+    case MAP_BLANK:
+        tile = new Tile(FLOOR, cellSize, {i, j});
         break;
-    case MAP_BLANK: case MAP_FOOD: case MAP_POWER_UP:
-        color = Qt::white;
+    case MAP_WALL:
+        tile = new Tile(WALL, cellSize, {i, j});
+        break;
+    case MAP_FOOD:
+        tile = new Tile(FLOOR, cellSize, {i, j});
+        item = new Collectable(FOOD, 1, cellSize, {i ,j});
+        break;
+    case MAP_POWER_UP:
+        tile = new Tile(FLOOR, cellSize, {i, j});
+        item = new Collectable(POWER_UP, 25, cellSize, {i, j});
         break;
     default:
         criticalQuit("Level file corrupted");
         break;
     }
-
-    auto [y, x] = pos;
-    QGraphicsRectItem *rect = new QGraphicsRectItem(x * cellSize, y * cellSize, cellSize, cellSize);
-
-    rect->setBrush(QBrush(color));
-    rect->setPen(QPen(Qt::NoPen));
-
-    return rect;
+    return std::make_pair(tile, item);
 }
-
 
 void GamePage::drawMapGrid()
 {
-    scene = new QGraphicsScene(this);
-
-    const int cellSize = 20;
-
     for (int i = 0; i < MAP_HEIGHT; ++i)
     {
         for (int j = 0; j < MAP_WIDTH; ++j)
         {
-            int value = mapGrid[i][j];
-
-            QGraphicsRectItem* rect = setUpRect(value, cellSize, {i, j});
-            QGraphicsPixmapItem* map_item = nullptr;
-            scene->addItem(rect);
-            switch (value) {
-            case MAP_FOOD:
-                map_item = new Collectable(FOOD, 1, cellSize, {i, j});
-                break;
-            case MAP_POWER_UP:
-                map_item = new Collectable(POWER_UP, 25, cellSize, {i, j});
-                break;
-            }
-            if(map_item)
+            auto [tile, item] = processGridValue(mapGrid[i][j], {i, j});
+            if(tile)
             {
-                scene->addItem(map_item);
+                scene->addItem(tile);
+                map_tiles.push_back(tile);
+            }
+            if(item)
+            {
+                scene->addItem(item);
+                collectables.push_back(item);
             }
         }
     }
-
-    ui->graphicsView->setScene(scene);
 }
 
 void GamePage::initializeGrid(const QJsonArray &jsonArr)
@@ -136,4 +139,21 @@ void GamePage::keyPressEvent(QKeyEvent *event)
         Shared::pageIndexStack.push(SETTINGS_PAGE);
         layout_ref->setCurrentIndex(SETTINGS_PAGE);
     }
+    else if (key == Shared::keyBindings[MVUP])
+    {
+        pacman->setDir(UP);
+    }
+    else if (key == Shared::keyBindings[MVLEFT])
+    {
+        pacman->setDir(LEFT);
+    }
+    else if (key == Shared::keyBindings[MVDOWN])
+    {
+        pacman->setDir(DOWN);
+    }
+    else if (key == Shared::keyBindings[MVRIGHT])
+    {
+        pacman->setDir(RIGHT);
+    }
+
 }

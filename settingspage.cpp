@@ -2,11 +2,17 @@
 #include "./ui_settingspage.h"
 #include <QMessageBox>
 
+#define MIN_VOL 0
+#define MAX_VOL 100
+#define DEF_VOL 5
+
 SettingsPage::SettingsPage(QWidget *parent, QStackedWidget* ref) :
     QWidget(parent),
     ui(new Ui::SettingsPage),
     currentButton(nullptr),
-    layout_ref(ref)
+    layout_ref(ref),
+    music_player(std::make_unique<QMediaPlayer>()),
+    audio_output(std::make_unique<QAudioOutput>())
 {
     ui->setupUi(this);
     this->setFocusPolicy(Qt::ClickFocus);
@@ -42,15 +48,16 @@ void SettingsPage::checkDuplicates()
 
 void SettingsPage::setUpMusic()
 {
-    Shared::music_player->setAudioOutput(Shared::audio_output.get());
-    Shared::music_player->setSource(QUrl("qrc:/mp3/testmusic.mp3"));
-    Shared::music_player->play();
+    music_player->setAudioOutput(audio_output.get());
+    music_player->setSource(QUrl("qrc:/mp3/testmusic.mp3"));
+    music_player->play();
+    audio_output->setVolume((qreal)DEF_VOL/100);
 }
 
 void SettingsPage::changeVolume()
 {
     qreal vol = QAudio::convertVolume(ui->volumeSlider->value() / qreal(100.0), QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale);
-    Shared::audio_output->setVolume(vol);
+    audio_output->setVolume(vol);
 }
 
 void SettingsPage::setUpButtonActions()
@@ -68,8 +75,8 @@ void SettingsPage::setUpButtonActions()
     buttonActions.insert(ui->settingsBinder, SETTINGS);
     ui->settingsBinder->setText(QKeySequence(Shared::keyBindings[SETTINGS]).toString());
     /*VOLUME SLIDER*/
-    ui->volumeSlider->setRange(0, 100);
-    ui->volumeSlider->setValue(50);
+    ui->volumeSlider->setRange(MIN_VOL, MAX_VOL);
+    ui->volumeSlider->setValue(DEF_VOL);
 }
 
 void SettingsPage::keyPressEvent(QKeyEvent * event)

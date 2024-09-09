@@ -16,7 +16,7 @@ public:
                 const int size, std::pair<int, int> pos);
     ~Collectable() = default;
     QRectF boundingRect() const override;
-    //QPainterPath shape() const override;
+    QPainterPath shape() const override;
 
 private:
     collectable_type type;

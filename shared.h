@@ -1,8 +1,8 @@
 #ifndef SHARED_H
 #define SHARED_H
 
-#include <QtMultimedia>
 #include <QPushButton>
+#include <QStack>
 
 #define KEY_ESCAPE 16777216
 #define WELCOME_PAGE 0
@@ -25,21 +25,26 @@ enum keyActions
     SETTINGS
 };
 
+enum moveDirections
+{
+    UP,
+    LEFT,
+    DOWN,
+    RIGHT
+};
+
 class Shared
 {
 public:
-
+    friend class Pacman;
     friend class GamePage;
     friend class MainWindow;
     friend class SettingsPage;
 private:
     static QStack<int> pageIndexStack;
-    static std::unique_ptr<QMediaPlayer> music_player;
-    static std::unique_ptr<QAudioOutput> audio_output;
     static QMap<keyActions, int> keyBindings;
     static const QMap<keyActions, int> defaultBindings;
 public:
-
     Shared() = default;
     ~Shared() = default;
 };

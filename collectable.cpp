@@ -21,3 +21,10 @@ QRectF Collectable::boundingRect() const
 {
     return QRectF(0, 0, size, size);
 }
+
+QPainterPath Collectable::shape() const
+{
+    QPainterPath path;
+    path.addRect(boundingRect());
+    return path;
+}
