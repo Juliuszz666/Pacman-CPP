@@ -4,7 +4,7 @@
 
 #define MIN_VOL 0
 #define MAX_VOL 100
-#define DEF_VOL 5
+#define DEF_VOL 0
 
 SettingsPage::SettingsPage(QWidget *parent, QStackedWidget* ref) :
     QWidget(parent),
@@ -148,6 +148,11 @@ void SettingsPage::connectButtons()
 
 void SettingsPage::backButtonClicked()
 {
+    Shared::pageIndexStack.pop();
+    if(Shared::pageIndexStack.top() == GAME_PAGE)
+    {
+        int x = true; //placeholder
+    }
     Shared::pageIndexStack.clear();
     Shared::pageIndexStack.push(WELCOME_PAGE);
     layout_ref->setCurrentIndex(WELCOME_PAGE);

@@ -14,7 +14,6 @@
 #define MAP_POWER_UP 2
 #define MAP_FOOD 3
 
-
 enum keyActions
 {
     MVUP,
@@ -30,7 +29,8 @@ enum moveDirections
     UP,
     LEFT,
     DOWN,
-    RIGHT
+    RIGHT,
+    NONE
 };
 
 class Shared

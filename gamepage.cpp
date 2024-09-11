@@ -17,6 +17,7 @@
 #define MAP_POWER_UP 2
 #define MAP_FOOD 3
 #define LEVELS_FILE ":/levels.json"
+#define TIMER_COLAPSE_TIME (1000/33.0)
 
 void criticalQuit(const char * msg);
 const int cellSize = 20;
@@ -36,7 +37,7 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     drawMapGrid();
     scene->addItem(pacman);
 
-    player_timer->start(100);
+    player_timer->start(TIMER_COLAPSE_TIME);
 
     connect(player_timer, &QTimer::timeout, pacman, &Pacman::move);
 }
@@ -134,6 +135,7 @@ void GamePage::loadLevel(int level_number)
 void GamePage::keyPressEvent(QKeyEvent *event)
 {
     int key = event->key();
+    static bool paused = false;
     if(key == Shared::keyBindings[SETTINGS])
     {
         Shared::pageIndexStack.push(SETTINGS_PAGE);
@@ -155,5 +157,22 @@ void GamePage::keyPressEvent(QKeyEvent *event)
     {
         pacman->setDir(RIGHT);
     }
-
+    else if (key == Shared::keyBindings[PAUSE] && paused)
+    {
+        player_timer->start(TIMER_COLAPSE_TIME);
+        paused = false;
+    }
+    else if (key == Shared::keyBindings[PAUSE] && !paused)
+    {
+        player_timer->stop();
+        paused = true;
+    }
+    try
+    {
+        pacman->rotatePlayer(pacman->rotations.at(pacman->getDir()));
+    }
+    catch (std::out_of_range &e)
+    {
+        pacman->rotatePlayer(pacman->rotations.at(RIGHT));
+    }
 }

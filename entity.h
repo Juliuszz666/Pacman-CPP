@@ -24,11 +24,19 @@ class Entity : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Entity(const int size) : size(size) {};
+    Entity(const int size) : size(size), direction(NONE) {};
     virtual ~Entity() = default;
+    const std::map<moveDirections, qreal> rotations =
+        {
+            {RIGHT, 0},
+            {UP, -90},
+            {LEFT, 180},
+            {DOWN, 90}
+        };
 
 protected:
-    virtual void move() = 0;
+    QPixmap originalPixmap;
+    virtual bool move() = 0;
     virtual bool canMove() const;
     const int size;
     moveDirections direction;
