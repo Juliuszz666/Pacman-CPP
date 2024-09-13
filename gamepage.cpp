@@ -9,7 +9,8 @@
 #include <QJsonDocument>
 #include <QFile>
 #include <QTimer>
-
+#include "collectable.h"
+#include "tile.h"
 
 
 #define MAP_BLANK 0
@@ -29,7 +30,8 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     layout_ref(ref),
     pacman(new Pacman(cellSize, {1, 1})),
     scene(new QGraphicsScene(this)),
-    player_timer(new QTimer(this))
+    player_timer(new QTimer(this)),
+    score(0)
 {
     ui->setupUi(this);
     ui->graphicsView->setScene(scene);
@@ -40,11 +42,19 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     player_timer->start(TIMER_COLAPSE_TIME);
 
     connect(player_timer, &QTimer::timeout, pacman, &Pacman::move);
+    connect(player_timer, &QTimer::timeout, this, &GamePage::collectCollectables);
+    connect(player_timer, &QTimer::timeout, this, &GamePage::updateScore);
+    connect(player_timer, &QTimer::timeout, pacman, &Pacman::canChangeDir);
 }
 
 GamePage::~GamePage()
 {
     delete ui;
+}
+
+void GamePage::updateScore()
+{
+    ui->label->setText("SCORE: " + QString::number(score));
 }
 
 std::pair<Tile*, Collectable*> processGridValue(int val, std::pair<int, int> pos)
@@ -84,7 +94,6 @@ void GamePage::drawMapGrid()
             if(tile)
             {
                 scene->addItem(tile);
-                map_tiles.push_back(tile);
             }
             if(item)
             {
@@ -143,19 +152,31 @@ void GamePage::keyPressEvent(QKeyEvent *event)
     }
     else if (key == Shared::keyBindings[MVUP])
     {
-        pacman->setDir(UP);
+        if(!pacman->setDir(UP))
+        {
+            pacman->setNextDir(UP);
+        }
     }
     else if (key == Shared::keyBindings[MVLEFT])
     {
-        pacman->setDir(LEFT);
+        if(!pacman->setDir(LEFT))
+        {
+            pacman->setNextDir(LEFT);
+        }
     }
     else if (key == Shared::keyBindings[MVDOWN])
     {
-        pacman->setDir(DOWN);
+        if(!pacman->setDir(DOWN))
+        {
+            pacman->setNextDir(DOWN);
+        }
     }
     else if (key == Shared::keyBindings[MVRIGHT])
     {
-        pacman->setDir(RIGHT);
+        if(!pacman->setDir(RIGHT))
+        {
+            pacman->setNextDir(RIGHT);
+        }
     }
     else if (key == Shared::keyBindings[PAUSE] && paused)
     {
@@ -167,12 +188,24 @@ void GamePage::keyPressEvent(QKeyEvent *event)
         player_timer->stop();
         paused = true;
     }
-    try
+}
+
+void GamePage::collectCollectables()
+{
+    QList<QGraphicsItem*> collisions = pacman->collidingItems();
+    for (auto item : collisions)
     {
-        pacman->rotatePlayer(pacman->rotations.at(pacman->getDir()));
+        Collectable* collectable = dynamic_cast<Collectable*>(item);
+        if (collectable)
+        {
+            auto it = std::find(collectables.begin(), collectables.end(), collectable);
+            score += collectable->getScore();
+            scene->removeItem(item);
+            collectables.erase(it);
+        }
     }
-    catch (std::out_of_range &e)
+    if(collectables.empty())
     {
-        pacman->rotatePlayer(pacman->rotations.at(RIGHT));
+        ui->label->setText("KONIEC");
     }
 }

@@ -8,7 +8,6 @@
 #include "pacman.h"
 #include "ghost.h"
 #include "collectable.h"
-#include "tile.h"
 #define MAP_WIDTH 30
 #define MAP_HEIGHT 20
 #define NO_OF_GHOSTS 4
@@ -28,16 +27,20 @@ private:
     QGraphicsScene *scene;
     QTimer * player_timer;
 
+    uint score;
     int current_level;
     int mapGrid[MAP_HEIGHT][MAP_WIDTH];
-    vector<Tile*> map_tiles;
-    vector<Collectable*> collectables;
     Pacman *pacman;
     Ghost *ghosts[NO_OF_GHOSTS];
+
+    std::vector<Collectable*> collectables;
 
     void drawMapGrid();
     void loadLevel(int lvl_number);
     void initializeGrid(const QJsonArray &jsonArr);
+private slots:
+    void collectCollectables();
+    void updateScore();
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 public:

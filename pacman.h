@@ -12,11 +12,11 @@ public:
     ~Pacman() override = default;
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
-    void setDir(moveDirections dir);
     moveDirections getDir() {return direction;}
-    void rotatePlayer(qreal angle);
-public slots:
-    bool move() override;
+
+private:
+    virtual bool canMove(DirVectors dir_vec) override;
+    virtual void rotateEntity(qreal angle) override;
 };
 
 #endif // PACMAN_H

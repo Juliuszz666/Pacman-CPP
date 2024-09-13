@@ -3,6 +3,7 @@
 #include <QGraphicsPixmapItem>
 #include "shared.h"
 
+#define DEFAULT_SPEED_CO 2
 #define NO_OF_DIRECTIONS 4
 
 struct DirVectors
@@ -10,11 +11,11 @@ struct DirVectors
     DirVectors(int x, int y) : x_co(x), y_co(y) {}
     int x_co;
     int y_co;
-    DirVectors operator*(const double a) const
+    DirVectors operator*(const int a) const
     {
-        return DirVectors((int)(this->x_co * a), (int)(this->y_co * a));
+        return DirVectors(this->x_co * a, this->y_co * a);
     }
-    DirVectors operator*=(const double a)
+    DirVectors operator*=(const int a)
     {
         return *this * a;
     }
@@ -24,8 +25,12 @@ class Entity : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Entity(const int size) : size(size), direction(NONE) {};
+    Entity(const int size);
     virtual ~Entity() = default;
+    void setNextDir(moveDirections next) {this->next_direction = next;};
+    bool canChangeDir();
+    bool setDir(moveDirections dir);
+    virtual void move();
     const std::map<moveDirections, qreal> rotations =
         {
             {RIGHT, 0},
@@ -35,11 +40,14 @@ public:
         };
 
 protected:
+    double SPEED_CO = DEFAULT_SPEED_CO;
     QPixmap originalPixmap;
-    virtual bool move() = 0;
-    virtual bool canMove() const;
+    virtual void rotateEntity(qreal angle) = 0;
+    virtual bool canMove(DirVectors speed_vec) = 0;
     const int size;
+    void rotatePlayer(qreal angle);
     moveDirections direction;
+    moveDirections next_direction;
     const DirVectors dir_vec[NO_OF_DIRECTIONS] =
     {
         DirVectors(0, -1),

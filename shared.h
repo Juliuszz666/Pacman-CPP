@@ -33,6 +33,12 @@ enum moveDirections
     NONE
 };
 
+enum GhostState
+{
+    EDIBLE,
+    INEDIBLE
+};
+
 class Shared
 {
 public:

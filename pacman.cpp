@@ -1,5 +1,28 @@
 #include "pacman.h"
 #include <QMessageBox>
+#include "tile.h"
+
+bool Pacman::canMove(DirVectors dir_vec)
+{
+    if(direction == NONE) return true;
+    int x = pos().x();
+    int y = pos().y();
+    auto [x_test, y_test] = dir_vec * SPEED_CO;
+    setPos(x + x_test, y + y_test);
+    QList<QGraphicsItem*> collisions = collidingItems();
+
+    for (auto item : collisions)
+    {
+        Tile* tile = dynamic_cast<Tile*>(item);
+        if (tile && tile->getType() == WALL)
+        {
+            setPos(x, y);
+            return false;
+        }
+    }
+    setPos(x, y);
+    return true;
+}
 
 Pacman::Pacman(const int size, const std::pair<int, int> ini_pos) :
     Entity(size)
@@ -17,8 +40,6 @@ QRectF Pacman::boundingRect() const
     return QRectF(0, 0, size, size);
 }
 
-
-
 QPainterPath Pacman::shape() const
 {
     QPainterPath path;
@@ -26,35 +47,7 @@ QPainterPath Pacman::shape() const
     return path;
 }
 
-bool Pacman::move()
-{
-    if(direction == NONE) return true;
-    const double SPEED_CO = 1.5;
-    DirVectors speed_vec = dir_vec[direction] * SPEED_CO;
-    auto [x_v, y_v] = speed_vec;
-    int x = pos().x();
-    int y = pos().y();
-    setPos(x + x_v, y + y_v);
-    if(!canMove())
-    {
-        setPos(x, y);
-        return false;
-    }
-    return true;
-}
-
-void Pacman::setDir(moveDirections dir)
-{
-    moveDirections current = direction;
-    direction = dir;
-
-    if(!move())
-    {
-        direction = current;
-    }
-}
-
-void Pacman::rotatePlayer(qreal angle)
+void Pacman::rotateEntity(qreal angle)
 {
     QTransform trans;
     trans.rotate(angle);

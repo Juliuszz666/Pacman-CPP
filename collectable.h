@@ -17,6 +17,8 @@ public:
     ~Collectable() = default;
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
+    collectable_type getType() {return type;}
+    const int getScore() {return score;}
 
 private:
     collectable_type type;
