@@ -10,7 +10,7 @@ private:
 public:
     GhostState getState() {return state;}
     void setState(GhostState newstate) {this->state = newstate;}
-
+    virtual void returnToSpawn() = 0;
     //Ghost();
 };
 

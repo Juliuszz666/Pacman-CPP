@@ -4,7 +4,6 @@ Entity::Entity(const int size) : size(size), direction(NONE), next_direction(NON
 
 bool Entity::canChangeDir()
 {
-    qDebug() << next_direction;
     if(next_direction == NONE || (next_direction != NONE && !canMove(dir_vec[next_direction])))
     {
         return false;

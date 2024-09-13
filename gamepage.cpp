@@ -198,6 +198,13 @@ void GamePage::collectCollectables()
         Collectable* collectable = dynamic_cast<Collectable*>(item);
         if (collectable)
         {
+            if(collectable->getType() == POWER_UP)
+            {
+                for(auto ghost : ghosts)
+                {
+                    ghost->setState(EDIBLE);
+                }
+            }
             auto it = std::find(collectables.begin(), collectables.end(), collectable);
             score += collectable->getScore();
             scene->removeItem(item);

@@ -8,9 +8,9 @@
 
 struct DirVectors
 {
-    DirVectors(int x, int y) : x_co(x), y_co(y) {}
     int x_co;
     int y_co;
+    DirVectors(int x, int y) : x_co(x), y_co(y) {}
     DirVectors operator*(const int a) const
     {
         return DirVectors(this->x_co * a, this->y_co * a);
@@ -45,7 +45,6 @@ protected:
     virtual void rotateEntity(qreal angle) = 0;
     virtual bool canMove(DirVectors speed_vec) = 0;
     const int size;
-    void rotatePlayer(qreal angle);
     moveDirections direction;
     moveDirections next_direction;
     const DirVectors dir_vec[NO_OF_DIRECTIONS] =
