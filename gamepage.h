@@ -26,6 +26,7 @@ private:
     Ui::GamePage *ui;
     QGraphicsScene *scene;
     QTimer * player_timer;
+    QTimer * power_up_timer;
 
     uint score;
     int current_level;
@@ -35,11 +36,15 @@ private:
 
     std::vector<Collectable*> collectables;
 
+    void powerUpMode();
     void drawMapGrid();
     void loadLevel(int lvl_number);
     void initializeGrid(const QJsonArray &jsonArr);
 private slots:
-    void collectCollectables();
+    void endPowerUpMode();
+    void handlePacmanCollision();
+    void collectCollectables(const QList<QGraphicsItem*> &collisions);
+    void ghostCollisions(const QList<QGraphicsItem*> &collisions);
     void updateScore();
 protected:
     void keyPressEvent(QKeyEvent *event) override;

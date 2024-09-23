@@ -40,8 +40,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         tile.h tile.cpp
         pacman.h pacman.cpp
 
-        ghost.h ghost.cpp
+        ghost.h
         enitity.cpp
+        blinky.h blinky.cpp
+        clyde.h clyde.cpp
+        inky.h inky.cpp
+        pinky.h pinky.cpp
+        ghost.cpp
 
 
     )

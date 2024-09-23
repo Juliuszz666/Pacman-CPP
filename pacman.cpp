@@ -25,27 +25,9 @@ bool Pacman::canMove(DirVectors dir_vec)
 }
 
 Pacman::Pacman(const int size, const std::pair<int, int> ini_pos) :
-    Entity(size)
-{
-    setFlag(QGraphicsItem::ItemIsFocusable);
-    setFocus();
-    setPixmap(QPixmap(":/img/pacman.png").scaled(size, size, Qt::KeepAspectRatio));
-    auto [y, x] = ini_pos;
-    setPos(x * size, y * size);
-    this->originalPixmap = pixmap();
-}
-
-QRectF Pacman::boundingRect() const
-{
-    return QRectF(0, 0, size, size);
-}
-
-QPainterPath Pacman::shape() const
-{
-    QPainterPath path;
-    path.addRect(boundingRect());
-    return path;
-}
+    Entity(size, ini_pos, ":/img/pacman.png"),
+    number_of_lives(3)
+{}
 
 void Pacman::rotateEntity(qreal angle)
 {

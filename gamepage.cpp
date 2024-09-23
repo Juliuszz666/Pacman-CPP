@@ -11,14 +11,18 @@
 #include <QTimer>
 #include "collectable.h"
 #include "tile.h"
-
+#include "blinky.h"
+#include "clyde.h"
+#include "inky.h"
+#include "pinky.h"
 
 #define MAP_BLANK 0
 #define MAP_WALL 1
 #define MAP_POWER_UP 2
 #define MAP_FOOD 3
 #define LEVELS_FILE ":/levels.json"
-#define TIMER_COLAPSE_TIME (1000/33.0)
+#define TIMER_COLAPSE_TIME (1000/30.0)
+#define POWER_UP_TIME 10'000 //ms
 
 void criticalQuit(const char * msg);
 const int cellSize = 20;
@@ -31,25 +35,43 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     pacman(new Pacman(cellSize, {1, 1})),
     scene(new QGraphicsScene(this)),
     player_timer(new QTimer(this)),
-    score(0)
+    power_up_timer(new QTimer(this)),
+    score(0),
+    ghosts
+    {
+        new Blinky(cellSize, {8,14}),
+        new Clyde(cellSize, {8, 15}),
+        new Inky(cellSize, {9, 14}),
+        new Pinky(cellSize, {18, 3})
+    }
 {
     ui->setupUi(this);
     ui->graphicsView->setScene(scene);
     loadLevel(current_level);
     drawMapGrid();
     scene->addItem(pacman);
+    for (int i = 0; i < NO_OF_GHOSTS; ++i)
+    {
+        scene->addItem(ghosts[i]);
+    }
 
     player_timer->start(TIMER_COLAPSE_TIME);
 
     connect(player_timer, &QTimer::timeout, pacman, &Pacman::move);
-    connect(player_timer, &QTimer::timeout, this, &GamePage::collectCollectables);
+    connect(player_timer, &QTimer::timeout, this, &GamePage::handlePacmanCollision);
     connect(player_timer, &QTimer::timeout, this, &GamePage::updateScore);
     connect(player_timer, &QTimer::timeout, pacman, &Pacman::canChangeDir);
+    connect(power_up_timer, &QTimer::timeout, power_up_timer, &QTimer::stop);
+    connect(power_up_timer, &QTimer::timeout, this, &GamePage::endPowerUpMode);
 }
 
 GamePage::~GamePage()
 {
     delete ui;
+    for(auto ghost : ghosts)
+    {
+        delete ghost;
+    }
 }
 
 void GamePage::updateScore()
@@ -190,20 +212,62 @@ void GamePage::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void GamePage::collectCollectables()
+void GamePage::endPowerUpMode()
+{
+    for(auto ghost : ghosts)
+    {
+        ghost->setState(INEDIBLE);
+    }
+}
+
+void GamePage::powerUpMode()
+{
+    power_up_timer->start(POWER_UP_TIME);
+    for(auto ghost : ghosts)
+    {
+        ghost->setState(EDIBLE);
+    }
+}
+
+void GamePage::handlePacmanCollision()
 {
     QList<QGraphicsItem*> collisions = pacman->collidingItems();
-    for (auto item : collisions)
+    collectCollectables(collisions);
+    ghostCollisions(collisions);
+}
+
+// everything in switch cases to be done
+void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
+{
+    qDebug() << pacman->getLife();
+    for (const auto &item : collisions)
+    {
+        Ghost* ghost = dynamic_cast<Ghost*>(item);
+        if(ghost)
+        {
+            switch (ghost->getState()) {
+            case EDIBLE:
+                ghost->returnToSpawn();
+                score += 200; // placeholder
+                break;
+            case INEDIBLE:
+                pacman->loseLife();
+                break;
+            }
+        }
+    }
+}
+
+void GamePage::collectCollectables(const QList<QGraphicsItem*> &collisions)
+{
+    for (const auto &item : collisions)
     {
         Collectable* collectable = dynamic_cast<Collectable*>(item);
         if (collectable)
         {
             if(collectable->getType() == POWER_UP)
             {
-                for(auto ghost : ghosts)
-                {
-                    ghost->setState(EDIBLE);
-                }
+                powerUpMode();
             }
             auto it = std::find(collectables.begin(), collectables.end(), collectable);
             score += collectable->getScore();

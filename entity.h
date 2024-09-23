@@ -25,11 +25,14 @@ class Entity : public QObject, public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    Entity(const int size);
+    Entity(const int size, const std::pair<int, int> ini_pos, const QString &img_filename);
     virtual ~Entity() = default;
     void setNextDir(moveDirections next) {this->next_direction = next;};
     bool canChangeDir();
+    moveDirections getDir() {return direction;}
     bool setDir(moveDirections dir);
+    QRectF boundingRect() const override;
+    QPainterPath shape() const override;
     virtual void move();
     const std::map<moveDirections, qreal> rotations =
         {

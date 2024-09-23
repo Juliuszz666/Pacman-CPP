@@ -9,7 +9,7 @@ Tile::Tile(tileType type, int size, std::pair<int, int> pos) :
     setRect(QRectF(0, 0, size, size));
     switch (type) {
     case FLOOR:
-        setBrush(QBrush(QColor(Qt::white)));
+        setBrush(QBrush(QColor(Qt::blue)));
         setPen(QPen(Qt::NoPen));
         break;
     case WALL:
