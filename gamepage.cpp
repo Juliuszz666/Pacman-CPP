@@ -21,8 +21,8 @@
 #define MAP_POWER_UP 2
 #define MAP_FOOD 3
 #define LEVELS_FILE ":/levels.json"
-#define TIMER_COLAPSE_TIME (1000/30.0)
-#define POWER_UP_TIME 10'000 //ms
+#define TIMER_COLAPSE_TIME (1000/30.0)      // 30 FPS
+#define POWER_UP_TIME 10'000                //ms
 
 void criticalQuit(const char * msg);
 const int cellSize = 20;
@@ -240,6 +240,7 @@ void GamePage::handlePacmanCollision()
 void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
 {
     qDebug() << pacman->getLife();
+    qDebug() << ghosts[3]->getState();
     for (const auto &item : collisions)
     {
         Ghost* ghost = dynamic_cast<Ghost*>(item);
@@ -251,10 +252,30 @@ void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
                 score += 200; // placeholder
                 break;
             case INEDIBLE:
-                pacman->loseLife();
+                if(pacman->loseLife())
+                {
+                    resetGame();
+                }
+                else
+                {
+                    gameOver();
+                }
                 break;
             }
         }
+    }
+}
+
+void GamePage::gameOver()
+{
+    qDebug() << "Zrób to";
+}
+
+void GamePage::resetGame()
+{
+    pacman->setPos(cellSize, cellSize);
+    for (auto ghost : ghosts) {
+        ghost->returnToSpawn();
     }
 }
 

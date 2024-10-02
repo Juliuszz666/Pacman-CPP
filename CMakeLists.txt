@@ -47,6 +47,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         inky.h inky.cpp
         pinky.h pinky.cpp
         ghost.cpp
+        gameoverpage.h gameoverpage.cpp
 
 
     )

@@ -2,6 +2,7 @@
 
 void Inky::returnToSpawn()
 {
+    state = INEDIBLE;
     qDebug() << "zrób to";
 }
 

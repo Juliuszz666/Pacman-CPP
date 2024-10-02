@@ -2,6 +2,7 @@
 
 void Clyde::returnToSpawn()
 {
+    state = INEDIBLE;
     qDebug() << "zrób to";
 }
 

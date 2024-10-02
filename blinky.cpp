@@ -2,6 +2,7 @@
 
 void Blinky::returnToSpawn()
 {
+    state = INEDIBLE;
     qDebug() << "zrób to";
 }
 

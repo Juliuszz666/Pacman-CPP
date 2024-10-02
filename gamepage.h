@@ -40,6 +40,8 @@ private:
     void drawMapGrid();
     void loadLevel(int lvl_number);
     void initializeGrid(const QJsonArray &jsonArr);
+    void resetGame();
+    void gameOver();
 private slots:
     void endPowerUpMode();
     void handlePacmanCollision();
