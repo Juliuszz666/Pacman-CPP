@@ -57,12 +57,27 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
 
     player_timer->start(TIMER_COLAPSE_TIME);
 
+    Blinky* blinky = static_cast<Blinky*>(ghosts[0]);
+    Clyde* clyde = static_cast<Clyde*>(ghosts[1]);
+    Inky* inky = static_cast<Inky*>(ghosts[2]);
+    Pinky* pinky = static_cast<Pinky*>(ghosts[3]);
+
     connect(player_timer, &QTimer::timeout, pacman, &Pacman::move);
     connect(player_timer, &QTimer::timeout, this, &GamePage::handlePacmanCollision);
     connect(player_timer, &QTimer::timeout, this, &GamePage::updateScore);
     connect(player_timer, &QTimer::timeout, pacman, &Pacman::canChangeDir);
     connect(power_up_timer, &QTimer::timeout, power_up_timer, &QTimer::stop);
     connect(power_up_timer, &QTimer::timeout, this, &GamePage::endPowerUpMode);
+    connect(player_timer, &QTimer::timeout, blinky, &Blinky::move);
+    connect(player_timer, &QTimer::timeout, clyde, &Clyde::move);
+    connect(player_timer, &QTimer::timeout, inky, &Inky::move);
+    connect(player_timer, &QTimer::timeout, pinky, &Pinky::move);
+    connect(player_timer, &QTimer::timeout, this, [&]() {
+        for (int i = 0; i < NO_OF_GHOSTS; ++i)
+        {
+            ghosts[i]->getPacmanPos(pacman->pos().toPoint());
+        }
+    });
 }
 
 GamePage::~GamePage()
