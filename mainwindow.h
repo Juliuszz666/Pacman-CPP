@@ -26,9 +26,6 @@ private:
     SettingsPage* settings_page;
     void connectButtons();
 
-
-    static QStack<int> pageIndexStack;
-
     Ui::MainWindow *ui;
 };
 

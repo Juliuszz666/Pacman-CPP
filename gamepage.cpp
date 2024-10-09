@@ -16,14 +16,6 @@
 #include "inky.h"
 #include "pinky.h"
 
-#define MAP_BLANK 0
-#define MAP_WALL 1
-#define MAP_POWER_UP 2
-#define MAP_FOOD 3
-#define LEVELS_FILE ":/levels.json"
-#define TIMER_COLAPSE_TIME (1000/30.0)      // 30 FPS
-#define POWER_UP_TIME 10'000                //ms
-
 void criticalQuit(const char * msg);
 const int cellSize = 20;
 
@@ -54,25 +46,26 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     {
         scene->addItem(ghosts[i]);
     }
-
     player_timer->start(TIMER_COLAPSE_TIME);
 
-    Blinky* blinky = static_cast<Blinky*>(ghosts[0]);
-    Clyde* clyde = static_cast<Clyde*>(ghosts[1]);
-    Inky* inky = static_cast<Inky*>(ghosts[2]);
-    Pinky* pinky = static_cast<Pinky*>(ghosts[3]);
+    Blinky* blinky =    static_cast<Blinky*>(ghosts[0]);
+    Clyde* clyde =      static_cast<Clyde*>(ghosts[1]);
+    Inky* inky =        static_cast<Inky*>(ghosts[2]);
+    Pinky* pinky =      static_cast<Pinky*>(ghosts[3]);
+    pinky->getPacmanPos(pacman->pos().toPoint());
+    pinky->load_maze(mapGrid);
 
-    connect(player_timer, &QTimer::timeout, pacman, &Pacman::move);
-    connect(player_timer, &QTimer::timeout, this, &GamePage::handlePacmanCollision);
-    connect(player_timer, &QTimer::timeout, this, &GamePage::updateScore);
-    connect(player_timer, &QTimer::timeout, pacman, &Pacman::canChangeDir);
-    connect(power_up_timer, &QTimer::timeout, power_up_timer, &QTimer::stop);
-    connect(power_up_timer, &QTimer::timeout, this, &GamePage::endPowerUpMode);
-    connect(player_timer, &QTimer::timeout, blinky, &Blinky::move);
-    connect(player_timer, &QTimer::timeout, clyde, &Clyde::move);
-    connect(player_timer, &QTimer::timeout, inky, &Inky::move);
-    connect(player_timer, &QTimer::timeout, pinky, &Pinky::move);
-    connect(player_timer, &QTimer::timeout, this, [&]() {
+    connect(player_timer,   &QTimer::timeout, pacman,           &Pacman::move);
+    connect(player_timer,   &QTimer::timeout, this,             &GamePage::handlePacmanCollision);
+    connect(player_timer,   &QTimer::timeout, this,             &GamePage::updateScore);
+    connect(player_timer,   &QTimer::timeout, pacman,           &Pacman::canChangeDir);
+    connect(power_up_timer, &QTimer::timeout, power_up_timer,   &QTimer::stop);
+    connect(power_up_timer, &QTimer::timeout, this,             &GamePage::endPowerUpMode);
+    connect(player_timer,   &QTimer::timeout, blinky,           &Blinky::move);
+    connect(player_timer,   &QTimer::timeout, clyde,            &Clyde::move);
+    connect(player_timer,   &QTimer::timeout, inky,             &Inky::move);
+    connect(player_timer,   &QTimer::timeout, pinky,            &Pinky::move);
+    connect(player_timer,   &QTimer::timeout, this,             [&]() {
         for (int i = 0; i < NO_OF_GHOSTS; ++i)
         {
             ghosts[i]->getPacmanPos(pacman->pos().toPoint());
@@ -83,10 +76,6 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
 GamePage::~GamePage()
 {
     delete ui;
-    for(auto ghost : ghosts)
-    {
-        delete ghost;
-    }
 }
 
 void GamePage::updateScore()
@@ -113,6 +102,9 @@ std::pair<Tile*, Collectable*> processGridValue(int val, std::pair<int, int> pos
     case MAP_POWER_UP:
         tile = new Tile(FLOOR, cellSize, {i, j});
         item = new Collectable(POWER_UP, 25, cellSize, {i, j});
+        break;
+    case __GHOST_GATE:
+        tile = new Tile(GHOST_GATE, cellSize, {i, j});
         break;
     default:
         criticalQuit("Level file corrupted");
@@ -254,8 +246,6 @@ void GamePage::handlePacmanCollision()
 // everything in switch cases to be done
 void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
 {
-    qDebug() << pacman->getLife();
-    qDebug() << ghosts[3]->getState();
     for (const auto &item : collisions)
     {
         Ghost* ghost = dynamic_cast<Ghost*>(item);
@@ -283,7 +273,7 @@ void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
 
 void GamePage::gameOver()
 {
-    qDebug() << "Zrób to";
+    qDebug() << "WTF";
 }
 
 void GamePage::resetGame()

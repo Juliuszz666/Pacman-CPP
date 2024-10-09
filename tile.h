@@ -6,7 +6,8 @@
 enum tileType
 {
     FLOOR,
-    WALL
+    WALL,
+    GHOST_GATE
 };
 
 class Tile : public QGraphicsRectItem

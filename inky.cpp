@@ -3,10 +3,10 @@
 void Inky::returnToSpawn()
 {
     state = INEDIBLE;
-    qDebug() << "zrób to";
+    //qDebug() << "zrób to";
 }
 
 void Inky::move()
 {
-    qDebug() << "zrób to";
+    //qDebug() << "zrób to";
 }

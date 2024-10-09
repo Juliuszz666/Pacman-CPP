@@ -3,10 +3,10 @@
 void Clyde::returnToSpawn()
 {
     state = INEDIBLE;
-    qDebug() << "zrób to";
+    //qDebug() << "zrób to";
 }
 
 void Clyde::move()
 {
-    qDebug() << "zrób to";
+    //qDebug() << "zrób to";
 }

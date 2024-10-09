@@ -13,6 +13,10 @@
 #define MAP_WALL 1
 #define MAP_POWER_UP 2
 #define MAP_FOOD 3
+#define __GHOST_GATE 4
+
+#define TIMER_COLAPSE_TIME (1000/30.0)      // 30 FPS
+#define POWER_UP_TIME 10'000                //ms
 
 enum keyActions
 {

@@ -3,10 +3,10 @@
 void Blinky::returnToSpawn()
 {
     state = INEDIBLE;
-    qDebug() << "zrób to";
+    //qDebug() << "zrób to";
 }
 
 void Blinky::move()
 {
-    qDebug() << "zrób to";
+    //qDebug() << "zrób to";
 }

@@ -10,13 +10,15 @@ Tile::Tile(tileType type, int size, std::pair<int, int> pos) :
     switch (type) {
     case FLOOR:
         setBrush(QBrush(QColor(Qt::blue)));
-        setPen(QPen(Qt::NoPen));
         break;
     case WALL:
         setBrush(QBrush(QColor(Qt::black)));
-        setPen(QPen(Qt::NoPen));
+        break;
+    case GHOST_GATE:
+        setBrush(QBrush(QColor(Qt::green)));
         break;
     }
+    setPen(QPen(Qt::NoPen));
     auto [y, x] = pos;
     setPos(x * size, y * size);
 }
