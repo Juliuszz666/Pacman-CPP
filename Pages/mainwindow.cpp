@@ -2,7 +2,7 @@
 #include "./ui_mainwindow.h"
 #include "settingspage.h"
 #include "gamepage.h"
-#include "shared.h"
+#include "../shared.h"
 #include <QMessageBox>
 
 void criticalQuit(const char * msg)

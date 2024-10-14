@@ -1,6 +1,6 @@
 #ifndef PACMAN_H
 #define PACMAN_H
-#include "shared.h"
+#include "../shared.h"
 #include "entity.h"
 #include <QKeyEvent>
 

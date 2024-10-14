@@ -14,9 +14,9 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Multimedia)
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
+        Pages/mainwindow.cpp
+        Pages/mainwindow.h
+        Pages/mainwindow.ui
 
         resources.qrc
 )
@@ -26,28 +26,20 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
 
-        entity.h
-        collectable.h
-        settingspage.ui
-        settingspage.h
-        settingspage.cpp
-        gamepage.cpp
-        gamepage.h
-        gamepage.h gamepage.cpp gamepage.ui
-        shared.h
-        shared.cpp
-        collectable.cpp
-        tile.h tile.cpp
-        pacman.h pacman.cpp
-
-        ghost.h
-        enitity.cpp
-        blinky.h blinky.cpp
-        clyde.h clyde.cpp
-        inky.h inky.cpp
-        pinky.h pinky.cpp
-        ghost.cpp
-        gameoverpage.h gameoverpage.cpp
+        shared.h                    shared.cpp
+        Entities/entity.h           Entities/enitity.cpp
+        Entities/ghost.h            Entities/ghost.cpp
+        Entities/pacman.h           Entities/pacman.cpp
+        Entities/blinky.h           Entities/blinky.cpp
+        Entities/clyde.h            Entities/clyde.cpp
+        Entities/inky.h             Entities/inky.cpp
+        Entities/pinky.h            Entities/pinky.cpp
+        Pages/gameoverpage.h        Pages/gameoverpage.cpp          #Pages/gameoverpage.ui
+        Pages/gamepage.h            Pages/gamepage.cpp              Pages/gamepage.ui
+        Pages/mainwindow.h          Pages/mainwindow.cpp            Pages/mainwindow.ui
+        Pages/settingspage.h        Pages/settingspage.cpp          Pages/settingspage.ui
+        MapElements/collectable.h   MapElements/collectable.cpp
+        MapElements/tile.h          MapElements/tile.cpp
 
 
     )

@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 #include <QGraphicsPixmapItem>
-#include "shared.h"
+#include "../shared.h"
 
 #define DEFAULT_SPEED_CO 2
 #define NO_OF_DIRECTIONS 4

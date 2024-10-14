@@ -1,6 +1,6 @@
 #ifndef SETTINGSPAGE_H
 #define SETTINGSPAGE_H
-#include "shared.h"
+#include "../shared.h"
 #include <QWidget>
 #include <QKeyEvent>
 #include <QPushButton>

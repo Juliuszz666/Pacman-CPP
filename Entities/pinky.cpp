@@ -1,5 +1,5 @@
 #include "pinky.h"
-#include "tile.h"
+#include "../MapElements/tile.h"
 #include <QTimer>
 #include <queue>
 
@@ -32,20 +32,6 @@ bool Pinky::canMove(DirVectors dir_vec)
     return true;
 }
 
-void Pinky::load_maze(const int map[MAP_HEIGHT][MAP_WIDTH])
-{
-    for (int i = 0; i < MAP_HEIGHT; ++i)
-    {
-        for (int j = 0; j < MAP_WIDTH; ++j)
-        {
-            maze[i][j] = map[i][j] == 1 ? 0 : 1;
-        }
-    }
-    int pac_x = pacman_pos.x() / size;
-    int pac_y = pacman_pos.y() / size;
-    maze[pac_y][pac_x] = 2;
-}
-
 void Pinky::updatePacmanPos()
 {
     for (int i = 0; i < MAP_HEIGHT; ++i)
@@ -73,9 +59,8 @@ void Pinky::returnToSpawn()
     setPos(15 * size, 5 * size);
 }
 
-void Pinky::BFSChase()
+path_t Pinky::BFS(int pinky_x, int pinky_y)
 {
-    using path_t = std::vector<std::pair<int,int>>;
     bool visited[MAP_HEIGHT][MAP_WIDTH] = {false};
     path_t                  path;
     std::queue<path_t>      BFS_queue;
@@ -88,13 +73,11 @@ void Pinky::BFSChase()
         [this, &BFS_queue, &visited]
         (const path_t& curr_path, int y, int x, int dy, int dx)
     {
-            visited[y][x] = true;
-            path_t new_path(curr_path);
-            new_path.push_back(std::make_pair(y + dy, x + dx));
-            BFS_queue.push(new_path);
+        visited[y][x] = true;
+        path_t new_path(curr_path);
+        new_path.emplace_back(std::make_pair(y + dy, x + dx));
+        BFS_queue.push(new_path);
     };
-    int pinky_x = static_cast<int>(std::floor(pos().x() / size));
-    int pinky_y = static_cast<int>(std::floor(pos().y() / size));
     BFS_queue.push({std::make_pair(pinky_y, pinky_x)});
     path_t best_path;
     while(!BFS_queue.empty())
@@ -124,6 +107,14 @@ void Pinky::BFSChase()
             visit_tile(curr_path, cur_y, cur_x, 0, 1);
         }
     }
+    return best_path;
+}
+
+void Pinky::BFSChase()
+{
+    int pinky_x = static_cast<int>(std::floor(pos().x() / size));
+    int pinky_y = static_cast<int>(std::floor(pos().y() / size));
+    path_t best_path = BFS(pinky_x, pinky_y);
     if(best_path.size() < 2) return;
     auto [dy, dx] = std::make_pair(best_path[1].first - pinky_y, best_path[1].second - pinky_x);
     switch (dy)
@@ -134,7 +125,8 @@ void Pinky::BFSChase()
     case 1:
         setDir(DOWN);
     }
-    switch (dx) {
+    switch (dx)
+    {
     case -1:
         setDir(LEFT);
         break;
@@ -149,12 +141,8 @@ void Pinky::move()
 {
     updatePacmanPos();
     BFSChase();
-    if(direction == NONE) return;
     auto [x_v, y_v] = dir_vec[direction] * SPEED_CO;
     int x = pos().x();
     int y = pos().y();
-    if(canMove(dir_vec[direction]))
-    {
-        setPos(x + x_v, y + y_v);
-    }
+    setPos(x + x_v, y + y_v);
 }

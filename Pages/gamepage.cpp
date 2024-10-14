@@ -1,6 +1,6 @@
 #include "gamepage.h"
 #include "./ui_gamepage.h"
-#include "shared.h"
+#include "../shared.h"
 #include <QGraphicsRectItem>
 #include <QGraphicsPixmapItem>
 #include <QPixmap>
@@ -9,12 +9,12 @@
 #include <QJsonDocument>
 #include <QFile>
 #include <QTimer>
-#include "collectable.h"
-#include "tile.h"
-#include "blinky.h"
-#include "clyde.h"
-#include "inky.h"
-#include "pinky.h"
+#include "../MapElements/collectable.h"
+#include "../MapElements/tile.h"
+#include "../Entities/blinky.h"
+#include "../Entities/clyde.h"
+#include "../Entities/inky.h"
+#include "../Entities/pinky.h"
 
 void criticalQuit(const char * msg);
 const int cellSize = 20;
@@ -54,6 +54,7 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     Pinky* pinky =      static_cast<Pinky*>(ghosts[3]);
     pinky->getPacmanPos(pacman->pos().toPoint());
     pinky->load_maze(mapGrid);
+    inky->load_maze(mapGrid);
 
     connect(player_timer,   &QTimer::timeout, pacman,           &Pacman::move);
     connect(player_timer,   &QTimer::timeout, this,             &GamePage::handlePacmanCollision);

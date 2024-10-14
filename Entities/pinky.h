@@ -2,14 +2,13 @@
 #define PINKY_H
 #include "ghost.h"
 
-#define MAP_WIDTH 30
-#define MAP_HEIGHT 20
+using path_t = std::vector<std::pair<int,int>>;
 
 class Pinky : public Ghost
 {
 private:
-    int maze [MAP_HEIGHT][MAP_WIDTH];
     void BFSChase();
+    path_t BFS(int p_x, int p_y);
 public slots:
     void updatePacmanPos();
 public:
@@ -17,7 +16,6 @@ public:
     ~Pinky() override = default;
     void move() override;
     bool canMove(DirVectors speed_vec) override;
-    void load_maze(const int maze[MAP_HEIGHT][MAP_WIDTH]);
     void returnToSpawn() override;
 };
 

@@ -1,6 +1,6 @@
 #include "pacman.h"
 #include <QMessageBox>
-#include "tile.h"
+#include "../MapElements/tile.h"
 
 bool Pacman::canMove(DirVectors dir_vec)
 {
@@ -14,7 +14,7 @@ bool Pacman::canMove(DirVectors dir_vec)
     for (auto item : collisions)
     {
         Tile* tile = dynamic_cast<Tile*>(item);
-        if (tile && tile->getType() == WALL)
+        if (tile && (tile->getType() == WALL || tile->getType() == GHOST_GATE))
         {
             setPos(x, y);
             return false;

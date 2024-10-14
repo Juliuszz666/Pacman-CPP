@@ -5,9 +5,9 @@
 #include <QGraphicsScene>
 #include <QStackedWidget>
 #include <vector>
-#include "pacman.h"
-#include "ghost.h"
-#include "collectable.h"
+#include "../Entities/pacman.h"
+#include "../Entities/ghost.h"
+#include "../MapElements/collectable.h"
 #define MAP_WIDTH 30
 #define MAP_HEIGHT 20
 #define NO_OF_GHOSTS 4
