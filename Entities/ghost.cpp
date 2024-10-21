@@ -1,4 +1,6 @@
 #include "ghost.h"
+#include "../MapElements/tile.h"
+#include <QTimer>
 
 bool Ghost::canMove(DirVectors dir_vec)
 {
@@ -9,6 +11,32 @@ bool Ghost::canMove(DirVectors dir_vec)
 void Ghost::rotateEntity(qreal angle)
 {
     qDebug() << "zrób to";
+}
+
+void Ghost::returnToSpawn()
+{
+
+    QTimer* reset_timer = new QTimer(nullptr);
+    reset_timer->start(RESET_TIME);
+    setPos(spawn_pos.second * size, spawn_pos.first * size);
+    setDir(UP);
+    connect(reset_timer, &QTimer::timeout, reset_timer, &QTimer::stop);
+    connect(reset_timer, &QTimer::destroyed, reset_timer, &QTimer::deleteLater);
+    connect(reset_timer, &QTimer::timeout, this, [&]()
+    {
+                state = INEDIBLE;
+    });
+}
+
+bool Ghost::noSpawnGate()
+{
+    QList<QGraphicsItem*> collisions = collidingItems();
+    for(auto item : collisions)
+    {
+        Tile* check = dynamic_cast<Tile*>(item);
+        if(check && check->getType() == GHOST_GATE) return false;
+    }
+    return true;
 }
 
 void Ghost::load_maze(const int map[MAP_HEIGHT][MAP_WIDTH])

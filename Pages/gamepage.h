@@ -50,6 +50,8 @@ private slots:
     void updateScore();
 protected:
     void keyPressEvent(QKeyEvent *event) override;
+public slots:
+    void run();
 public:
     GamePage(QWidget *parent = nullptr, QStackedWidget* ref = nullptr);
     ~GamePage();

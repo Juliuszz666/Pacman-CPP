@@ -1,12 +1,6 @@
 #include "inky.h"
 #include "../MapElements/tile.h"
 
-void Inky::returnToSpawn()
-{
-    state = INEDIBLE;
-    //qDebug() << "zrób to";
-}
-
 bool Inky::canMove(DirVectors dir_vec)
 {
     int x = pos().x();
@@ -36,7 +30,8 @@ void Inky::stickLeft()
     }
     else if (canMove(dir_vec[direction]))
     {
-        return;
+        if(std::rand() % 420 == 0 ) setDir(backTurn(direction));
+        else return;
     }
     else if (canMove(dir_vec[rightTurn(direction)]))
     {

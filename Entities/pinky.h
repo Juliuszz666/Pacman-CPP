@@ -13,10 +13,9 @@ public slots:
     void updatePacmanPos();
 public:
     Pinky(const int size, const std::pair<int, int> ini_pos);
-    ~Pinky() override = default;
+    ~Pinky() = default;
     void move() override;
     bool canMove(DirVectors speed_vec) override;
-    void returnToSpawn() override;
 };
 
 #endif // PINKY_H

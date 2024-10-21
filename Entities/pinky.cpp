@@ -3,8 +3,6 @@
 #include <QTimer>
 #include <queue>
 
-#define RESET_TIME 2000
-
 Pinky::Pinky(const int size, const std::pair<int, int> ini_pos) :
                Ghost(size, ini_pos, ":/img/pinky.png")
 {
@@ -44,19 +42,6 @@ void Pinky::updatePacmanPos()
     maze
         [static_cast<int>(std::floor(pacman_pos.y() / size))]
         [static_cast<int>(std::floor(pacman_pos.x() / size))] = 2;
-}
-
-void Pinky::returnToSpawn()
-{
-    QTimer* reset_timer = new QTimer(nullptr);
-    connect(reset_timer, &QTimer::timeout, reset_timer, &QTimer::stop);
-    connect(reset_timer, &QTimer::destroyed, reset_timer, &QTimer::deleteLater);
-    connect(reset_timer, &QTimer::timeout, this, [&]()
-    {
-        state = INEDIBLE;
-    });
-    reset_timer->start(RESET_TIME);
-    setPos(15 * size, 5 * size);
 }
 
 path_t Pinky::BFS(int pinky_x, int pinky_y)

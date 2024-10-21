@@ -31,10 +31,10 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     score(0),
     ghosts
     {
-        new Blinky(cellSize, {8,14}),
-        new Clyde(cellSize, {8, 15}),
-        new Inky(cellSize, {9, 14}),
-        new Pinky(cellSize, {18, 3})
+        new Blinky(cellSize, {7,15}),
+        new Clyde(cellSize, {7, 14}),
+        new Inky(cellSize, {7, 16}),
+        new Pinky(cellSize, {5, 15})
     }
 {
     ui->setupUi(this);
@@ -46,7 +46,6 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     {
         scene->addItem(ghosts[i]);
     }
-    player_timer->start(TIMER_COLAPSE_TIME);
 
     Blinky* blinky =    static_cast<Blinky*>(ghosts[0]);
     Clyde* clyde =      static_cast<Clyde*>(ghosts[1]);
@@ -55,6 +54,7 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     pinky->getPacmanPos(pacman->pos().toPoint());
     pinky->load_maze(mapGrid);
     inky->load_maze(mapGrid);
+    blinky->load_maze(mapGrid);
 
     connect(player_timer,   &QTimer::timeout, pacman,           &Pacman::move);
     connect(player_timer,   &QTimer::timeout, this,             &GamePage::handlePacmanCollision);
@@ -72,6 +72,11 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
             ghosts[i]->getPacmanPos(pacman->pos().toPoint());
         }
     });
+}
+
+void GamePage::run()
+{
+    player_timer->start(TIMER_COLAPSE_TIME);
 }
 
 GamePage::~GamePage()

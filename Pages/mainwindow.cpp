@@ -26,12 +26,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connectButtons();
 
-    GamePage* game_page = new GamePage(this, ui->stackedWidget);
-    SettingsPage* settings_page = new SettingsPage(this, ui->stackedWidget);
+    game_page = new GamePage(this, ui->stackedWidget);
+    settings_page = new SettingsPage(this, ui->stackedWidget);
     ui->stackedWidget->addWidget(game_page);
     ui->stackedWidget->addWidget(settings_page);
     ui->stackedWidget->setCurrentWidget(ui->welcome_page);
     Shared::pageIndexStack.push(WELCOME_PAGE);
+    qDebug() << game_page;
 }
 
 MainWindow::~MainWindow() {
@@ -42,6 +43,7 @@ void MainWindow::startButtonClicked()
 {
     Shared::pageIndexStack.push(GAME_PAGE);
     ui->stackedWidget->setCurrentIndex(GAME_PAGE);
+    game_page->run();
 }
 
 void MainWindow::quitButtonClicked()
