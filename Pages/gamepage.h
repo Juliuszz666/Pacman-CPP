@@ -36,6 +36,7 @@ private:
 
     std::vector<Collectable*> collectables;
 
+    void connectTimers();
     void powerUpMode();
     void drawMapGrid();
     void loadLevel(int lvl_number);

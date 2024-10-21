@@ -9,6 +9,7 @@ class Pinky : public Ghost
 private:
     void BFSChase();
     path_t BFS(int p_x, int p_y);
+    int maze [MAP_HEIGHT][MAP_WIDTH];
 public slots:
     void updatePacmanPos();
 public:
@@ -16,6 +17,7 @@ public:
     ~Pinky() = default;
     void move() override;
     bool canMove(DirVectors speed_vec) override;
+    void load_maze(const int map[MAP_HEIGHT][MAP_WIDTH]);
 };
 
 #endif // PINKY_H

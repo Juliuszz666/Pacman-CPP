@@ -15,7 +15,6 @@ class Ghost : public Entity
 protected:
     GhostState state;
     QPoint pacman_pos;
-    int maze [MAP_HEIGHT][MAP_WIDTH];
     bool noSpawnGate();
     bool out_of_spawn;
     std::pair<int,int> spawn_pos;
@@ -23,7 +22,6 @@ public:
     GhostState getState() {return state;}
     void setState(GhostState newstate) {this->state = newstate;}
     void getPacmanPos(QPoint pos) {this->pacman_pos = pos;}
-    void load_maze(const int map[MAP_HEIGHT][MAP_WIDTH]);
     void returnToSpawn();
     virtual void move() override = 0;
     virtual void rotateEntity(qreal angle) override;

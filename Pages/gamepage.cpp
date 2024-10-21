@@ -46,16 +46,17 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     {
         scene->addItem(ghosts[i]);
     }
+    connectTimers();
+}
 
+void GamePage::connectTimers()
+{
     Blinky* blinky =    static_cast<Blinky*>(ghosts[0]);
     Clyde* clyde =      static_cast<Clyde*>(ghosts[1]);
     Inky* inky =        static_cast<Inky*>(ghosts[2]);
     Pinky* pinky =      static_cast<Pinky*>(ghosts[3]);
     pinky->getPacmanPos(pacman->pos().toPoint());
     pinky->load_maze(mapGrid);
-    inky->load_maze(mapGrid);
-    blinky->load_maze(mapGrid);
-
     connect(player_timer,   &QTimer::timeout, pacman,           &Pacman::move);
     connect(player_timer,   &QTimer::timeout, this,             &GamePage::handlePacmanCollision);
     connect(player_timer,   &QTimer::timeout, this,             &GamePage::updateScore);
@@ -185,34 +186,11 @@ void GamePage::keyPressEvent(QKeyEvent *event)
         Shared::pageIndexStack.push(SETTINGS_PAGE);
         layout_ref->setCurrentIndex(SETTINGS_PAGE);
     }
-    else if (key == Shared::keyBindings[MVUP])
-    {
-        if(!pacman->setDir(UP))
-        {
-            pacman->setNextDir(UP);
-        }
-    }
-    else if (key == Shared::keyBindings[MVLEFT])
-    {
-        if(!pacman->setDir(LEFT))
-        {
-            pacman->setNextDir(LEFT);
-        }
-    }
-    else if (key == Shared::keyBindings[MVDOWN])
-    {
-        if(!pacman->setDir(DOWN))
-        {
-            pacman->setNextDir(DOWN);
-        }
-    }
-    else if (key == Shared::keyBindings[MVRIGHT])
-    {
-        if(!pacman->setDir(RIGHT))
-        {
-            pacman->setNextDir(RIGHT);
-        }
-    }
+    moveDirections new_dir = NONE;
+    if(key == Shared::keyBindings[MVUP])            new_dir = UP;
+    else if(key == Shared::keyBindings[MVLEFT])     new_dir = LEFT;
+    else if(key == Shared::keyBindings[MVDOWN])     new_dir = DOWN;
+    else if(key == Shared::keyBindings[MVRIGHT])    new_dir = RIGHT;
     else if (key == Shared::keyBindings[PAUSE] && paused)
     {
         player_timer->start(TIMER_COLAPSE_TIME);
@@ -222,6 +200,10 @@ void GamePage::keyPressEvent(QKeyEvent *event)
     {
         player_timer->stop();
         paused = true;
+    }
+    if(!pacman->setDir(new_dir))
+    {
+        pacman->setNextDir(new_dir);
     }
 }
 

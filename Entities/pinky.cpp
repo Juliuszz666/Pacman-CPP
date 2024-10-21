@@ -30,6 +30,20 @@ bool Pinky::canMove(DirVectors dir_vec)
     return true;
 }
 
+void Pinky::load_maze(const int map[MAP_HEIGHT][MAP_WIDTH])
+{
+    for (int i = 0; i < MAP_HEIGHT; ++i)
+    {
+        for (int j = 0; j < MAP_WIDTH; ++j)
+        {
+            maze[i][j] = map[i][j] == 1 ? 0 : 1;
+        }
+    }
+    int pac_x = pacman_pos.x() / size;
+    int pac_y = pacman_pos.y() / size;
+    maze[pac_y][pac_x] = 2;
+}
+
 void Pinky::updatePacmanPos()
 {
     for (int i = 0; i < MAP_HEIGHT; ++i)

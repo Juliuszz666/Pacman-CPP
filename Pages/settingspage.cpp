@@ -134,13 +134,13 @@ void SettingsPage::bindKey()
 void SettingsPage::connectButtons()
 {
     /* BACK BUTTON */
-    connect(ui->backButton, &QPushButton::clicked, this, &SettingsPage::backButtonClicked);
+    connect(ui->backButton,     &QPushButton::clicked, this, &SettingsPage::backButtonClicked);
     /* BINDING BUTTONS */
-    connect(ui->mvDownBinder, &QPushButton::clicked, this, &SettingsPage::bindKey);
-    connect(ui->mvUpBinder, &QPushButton::clicked, this, &SettingsPage::bindKey);
-    connect(ui->mvLeftBinder, &QPushButton::clicked, this, &SettingsPage::bindKey);
-    connect(ui->mvRightBinder, &QPushButton::clicked, this, &SettingsPage::bindKey);
-    connect(ui->pauseBinder, &QPushButton::clicked, this, &SettingsPage::bindKey);
+    connect(ui->mvDownBinder,   &QPushButton::clicked, this, &SettingsPage::bindKey);
+    connect(ui->mvUpBinder,     &QPushButton::clicked, this, &SettingsPage::bindKey);
+    connect(ui->mvLeftBinder,   &QPushButton::clicked, this, &SettingsPage::bindKey);
+    connect(ui->mvRightBinder,  &QPushButton::clicked, this, &SettingsPage::bindKey);
+    connect(ui->pauseBinder,    &QPushButton::clicked, this, &SettingsPage::bindKey);
     connect(ui->settingsBinder, &QPushButton::clicked, this, &SettingsPage::bindKey);
     /* VOLUME SLIDER */
     connect(ui->volumeSlider, &QSlider::valueChanged, this, &SettingsPage::changeVolume);
