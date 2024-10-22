@@ -31,6 +31,10 @@ private:
     void connectButtons();
     void backButtonClicked();
     void bindKey();
+
+signals:
+    void backButtonClickedSignal();
+
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 public:

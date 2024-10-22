@@ -41,7 +41,6 @@ private:
     void drawMapGrid();
     void loadLevel(int lvl_number);
     void initializeGrid(const QJsonArray &jsonArr);
-    void resetGame();
     void gameOver();
 private slots:
     void endPowerUpMode();
@@ -54,6 +53,7 @@ protected:
 public slots:
     void run();
 public:
+    void resetGame();
     GamePage(QWidget *parent = nullptr, QStackedWidget* ref = nullptr);
     ~GamePage();
 };

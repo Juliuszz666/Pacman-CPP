@@ -4,9 +4,10 @@
 
 class Clyde : public Ghost
 {
+    void randomLikeMovement();
+
 public:
-    Clyde(const int size, const std::pair<int, int> ini_pos) :
-        Ghost(size, ini_pos, ":/img/clyde.png") {}
+    Clyde(const int size, const std::pair<int, int> ini_pos, const std::pair<int, int> gate_pos);
     ~Clyde() = default;
     void move() override;
 };

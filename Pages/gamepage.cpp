@@ -31,10 +31,10 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     score(0),
     ghosts
     {
-        new Blinky(cellSize, {7,15}),
-        new Clyde(cellSize, {7, 14}),
-        new Inky(cellSize, {7, 16}),
-        new Pinky(cellSize, {5, 15})
+        new Blinky(cellSize, {7,15}, {5, 15}),
+        new Clyde(cellSize, {7, 14}, {5, 15}),
+        new Inky(cellSize, {7, 16}, {5, 15}),
+        new Pinky(cellSize, {5, 15}, {5, 15})
     }
 {
     ui->setupUi(this);
@@ -266,8 +266,12 @@ void GamePage::gameOver()
 
 void GamePage::resetGame()
 {
+    current_level = 1;
+    loadLevel(current_level);
+    drawMapGrid();
     pacman->setPos(cellSize, cellSize);
-    for (auto ghost : ghosts) {
+    for (auto ghost : ghosts)
+    {
         ghost->returnToSpawn();
     }
 }

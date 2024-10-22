@@ -12,7 +12,7 @@ public:
     ~Pacman() override = default;
     bool loseLife() {return --number_of_lives;}
     uint getLife() {return number_of_lives;}
-
+    void move() override;
 private:
     uint number_of_lives;
     virtual bool canMove(DirVectors dir_vec) override;

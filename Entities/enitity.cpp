@@ -33,18 +33,6 @@ bool Entity::setDir(moveDirections dir)
     return true;
 }
 
-void Entity::move()
-{
-    if(direction == NONE) return;
-    auto [x_v, y_v] = dir_vec[direction] * SPEED_CO;
-    int x = pos().x();
-    int y = pos().y();
-    if(canMove(dir_vec[direction]))
-    {
-        setPos(x + x_v, y + y_v);
-    }
-}
-
 QRectF Entity::boundingRect() const
 {
     return QRectF(0, 0, size, size);

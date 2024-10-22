@@ -4,8 +4,23 @@
 
 bool Ghost::canMove(DirVectors dir_vec)
 {
-    qDebug() << "zrób to";
-    return false;
+    int x = pos().x();
+    int y = pos().y();
+    auto [x_test, y_test] = dir_vec * SPEED_CO;
+    setPos(x + x_test, y + y_test);
+    QList<QGraphicsItem*> collisions = collidingItems();
+
+    for (auto item : collisions)
+    {
+        Tile* tile = dynamic_cast<Tile*>(item);
+        if (tile && tile->getType() == WALL)
+        {
+            setPos(x, y);
+            return false;
+        }
+    }
+    setPos(x, y);
+    return true;
 }
 
 void Ghost::rotateEntity(qreal angle)
@@ -15,8 +30,6 @@ void Ghost::rotateEntity(qreal angle)
 
 void Ghost::returnToSpawn()
 {
-
-    QTimer* reset_timer = new QTimer(nullptr);
     reset_timer->start(RESET_TIME);
     setPos(spawn_pos.second * size, spawn_pos.first * size);
     setDir(UP);

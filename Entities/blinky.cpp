@@ -1,26 +1,11 @@
 #include "blinky.h"
-#include "../MapElements/tile.h"
 
-bool Blinky::canMove(DirVectors dir_vec)
+Blinky::Blinky(const int size,
+               const std::pair<int, int> ini_pos,
+               const std::pair<int, int> gate_pos) :
+    Ghost(size, ini_pos, ":/img/blinky.png", gate_pos)
 {
-    if(direction == NONE) return true;
-    int x = pos().x();
-    int y = pos().y();
-    auto [x_test, y_test] = dir_vec * SPEED_CO;
-    setPos(x + x_test, y + y_test);
-    QList<QGraphicsItem*> collisions = collidingItems();
-
-    for (auto item : collisions)
-    {
-        Tile* tile = dynamic_cast<Tile*>(item);
-        if (tile && tile->getType() == WALL)
-        {
-            setPos(x, y);
-            return false;
-        }
-    }
-    setPos(x, y);
-    return true;
+    direction = UP;
 }
 
 void Blinky::stickRight()

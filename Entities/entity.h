@@ -33,7 +33,7 @@ public:
     bool setDir(moveDirections dir);
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
-    virtual void move();
+    virtual void move() = 0;
     const std::map<moveDirections, qreal> rotations =
         {
             {RIGHT, 0},

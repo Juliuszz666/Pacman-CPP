@@ -1,6 +1,7 @@
 #ifndef GHOST_H
 #define GHOST_H
 #include "entity.h"
+#include <QTimer>
 
 #define MAP_WIDTH 30
 #define MAP_HEIGHT 20
@@ -18,7 +19,9 @@ protected:
     bool noSpawnGate();
     bool out_of_spawn;
     std::pair<int,int> spawn_pos;
+    std::pair<int,int> gate_pos;
 public:
+    QTimer* reset_timer;
     GhostState getState() {return state;}
     void setState(GhostState newstate) {this->state = newstate;}
     void getPacmanPos(QPoint pos) {this->pacman_pos = pos;}
@@ -26,12 +29,15 @@ public:
     virtual void move() override = 0;
     virtual void rotateEntity(qreal angle) override;
     virtual bool canMove(DirVectors speed_vec) override;
-    Ghost(const int size, const std::pair<int, int> ini_pos, const QString &img_filename) :
+    Ghost(const int size, const std::pair<int, int> ini_pos, const QString &img_filename, const std::pair<int,int> g_pos) :
         Entity(size, ini_pos, img_filename),
         state(INEDIBLE),
         out_of_spawn(false),
         spawn_pos(ini_pos),
-        pacman_pos({}) {}
+        reset_timer(new QTimer(nullptr)),
+        pacman_pos({}),
+        gate_pos(g_pos)    {}
+    ~Ghost() {delete reset_timer;}
 };
 
 #endif // GHOST_H

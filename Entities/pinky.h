@@ -13,10 +13,10 @@ private:
 public slots:
     void updatePacmanPos();
 public:
-    Pinky(const int size, const std::pair<int, int> ini_pos);
+    Pinky(const int size, const std::pair<int, int> ini_pos, const std::pair<int,int> gate_pos);
     ~Pinky() = default;
     void move() override;
-    bool canMove(DirVectors speed_vec) override;
+    //bool canMove(DirVectors speed_vec) override;
     void load_maze(const int map[MAP_HEIGHT][MAP_WIDTH]);
 };
 

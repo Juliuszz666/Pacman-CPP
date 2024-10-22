@@ -148,12 +148,5 @@ void SettingsPage::connectButtons()
 
 void SettingsPage::backButtonClicked()
 {
-    Shared::pageIndexStack.pop();
-    if(Shared::pageIndexStack.top() == GAME_PAGE)
-    {
-        int x = true; //placeholder
-    }
-    Shared::pageIndexStack.clear();
-    Shared::pageIndexStack.push(WELCOME_PAGE);
-    layout_ref->setCurrentIndex(WELCOME_PAGE);
+    emit backButtonClickedSignal();
 }

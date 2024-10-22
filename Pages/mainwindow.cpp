@@ -14,6 +14,7 @@ void criticalQuit(const char * msg)
 
 void MainWindow::connectButtons()
 {
+    connect(settings_page, &SettingsPage::backButtonClickedSignal, this, &MainWindow::onBackButtonClicked);
     connect(ui->startGameButton, &QPushButton::clicked, this, &MainWindow::startButtonClicked);
     connect(ui->quitButton, &QPushButton::clicked, this, &MainWindow::quitButtonClicked);
     connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::settingsButtonClicked);
@@ -24,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connectButtons();
 
     game_page = new GamePage(this, ui->stackedWidget);
     settings_page = new SettingsPage(this, ui->stackedWidget);
@@ -32,11 +32,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->stackedWidget->addWidget(settings_page);
     ui->stackedWidget->setCurrentWidget(ui->welcome_page);
     Shared::pageIndexStack.push(WELCOME_PAGE);
-    qDebug() << game_page;
+    connectButtons();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::onBackButtonClicked()
+{
+    Shared::pageIndexStack.clear();
+    Shared::pageIndexStack.push(WELCOME_PAGE);
+    ui->stackedWidget->setCurrentIndex(WELCOME_PAGE);
+    game_page->resetGame();
 }
 
 void MainWindow::startButtonClicked()
