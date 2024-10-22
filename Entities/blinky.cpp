@@ -3,7 +3,7 @@
 Blinky::Blinky(const int size,
                const std::pair<int, int> ini_pos,
                const std::pair<int, int> gate_pos) :
-    Ghost(size, ini_pos, ":/img/blinky.png", gate_pos)
+    Ghost(size, ini_pos, ":/img/blinkyup.png", gate_pos, "blinky")
 {
     direction = UP;
 }

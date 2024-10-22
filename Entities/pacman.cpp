@@ -19,6 +19,14 @@ void Pacman::move()
     }
 }
 
+void Pacman::reset()
+{
+    setPos(size, size);
+    direction = NONE;
+    setZValue(1.0);
+    rotateEntity(rotations.at(RIGHT));
+}
+
 bool Pacman::canMove(DirVectors dir_vec)
 {
     if(direction == NONE) return true;

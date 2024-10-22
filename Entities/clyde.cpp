@@ -3,7 +3,7 @@
 Clyde::Clyde(const int size,
              const std::pair<int, int> ini_pos,
              const std::pair<int, int> gate_pos) :
-    Ghost(size, ini_pos, ":/img/clyde.png", gate_pos)
+    Ghost(size, ini_pos, ":/img/clyderight.png", gate_pos, "clyde")
 {
     direction = RIGHT;
 }

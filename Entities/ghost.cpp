@@ -1,6 +1,22 @@
 #include "ghost.h"
 #include "../MapElements/tile.h"
 #include <QTimer>
+#include <QPixmap>
+
+Ghost::Ghost(const int size,
+             const std::pair<int, int> ini_pos,
+             const QString &img_filename,
+             const std::pair<int,int> g_pos,
+             const QString& name) :
+    Entity(size, ini_pos, img_filename),
+    state(INEDIBLE),
+    out_of_spawn(false),
+    spawn_pos(ini_pos),
+    reset_timer(new QTimer(nullptr)),
+    pacman_pos({}),
+    gate_pos(g_pos),
+    name(name)
+{}
 
 bool Ghost::canMove(DirVectors dir_vec)
 {
@@ -25,7 +41,25 @@ bool Ghost::canMove(DirVectors dir_vec)
 
 void Ghost::rotateEntity(qreal angle)
 {
-    qDebug() << "zrób to";
+    QString dir_str;
+    switch (direction) {
+    case LEFT:
+        dir_str = "left";
+        break;
+    case UP:
+        dir_str = "up";
+        break;
+    case RIGHT:
+        dir_str = "right";
+        break;
+    case DOWN:
+        dir_str = "down";
+        break;
+    default:
+        return;
+    }
+    setPixmap(QPixmap(":/img/" + name + dir_str + ".png").scaled(size, size, Qt::KeepAspectRatio));
+    setZValue(1.0);
 }
 
 void Ghost::returnToSpawn()

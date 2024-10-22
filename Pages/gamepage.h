@@ -42,6 +42,7 @@ private:
     void loadLevel(int lvl_number);
     void initializeGrid(const QJsonArray &jsonArr);
     void gameOver();
+    void newLifeRestart();
 private slots:
     void endPowerUpMode();
     void handlePacmanCollision();

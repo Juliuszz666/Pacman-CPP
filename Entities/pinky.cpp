@@ -4,7 +4,7 @@
 #include <queue>
 
 Pinky::Pinky(const int size, const std::pair<int, int> ini_pos, const std::pair<int,int> gate_pos) :
-               Ghost(size, ini_pos, ":/img/pinky.png", gate_pos)
+               Ghost(size, ini_pos, ":/img/pinkyleft.png", gate_pos, "pinky")
 {
 }
 

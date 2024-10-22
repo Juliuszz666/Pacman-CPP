@@ -10,7 +10,7 @@ Collectable::Collectable(const collectable_type type, const int score, const int
         setPixmap(QPixmap(":/img/food.png").scaled(size, size, Qt::KeepAspectRatio));
         break;
     case POWER_UP:
-        setPixmap(QPixmap(":/img/power_up.png").scaled(size, size, Qt::KeepAspectRatio));
+        setPixmap(QPixmap(":/img/powerup.png").scaled(size, size, Qt::KeepAspectRatio));
         break;
     }
     auto [y, x] = pos;

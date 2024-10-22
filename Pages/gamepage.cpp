@@ -231,6 +231,15 @@ void GamePage::handlePacmanCollision()
     ghostCollisions(collisions);
 }
 
+void GamePage::newLifeRestart()
+{
+    pacman->setPos(cellSize, cellSize);
+    for (auto ghost : ghosts)
+    {
+        ghost->returnToSpawn();
+    }
+}
+
 // everything in switch cases to be done
 void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
 {
@@ -247,7 +256,7 @@ void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
             case INEDIBLE:
                 if(pacman->loseLife())
                 {
-                    resetGame();
+                    newLifeRestart();
                 }
                 else
                 {
@@ -266,14 +275,24 @@ void GamePage::gameOver()
 
 void GamePage::resetGame()
 {
+    score = 0;
     current_level = 1;
+    foreach(QGraphicsItem *item, scene->items())
+    {
+        if (dynamic_cast<Collectable*>(item) || dynamic_cast<Tile*>(item))
+        {
+            scene->removeItem(item);
+            delete item;
+        }
+    }
     loadLevel(current_level);
     drawMapGrid();
-    pacman->setPos(cellSize, cellSize);
     for (auto ghost : ghosts)
     {
         ghost->returnToSpawn();
+        ghost->setZValue(1.0);
     }
+    pacman->reset();
 }
 
 void GamePage::collectCollectables(const QList<QGraphicsItem*> &collisions)
