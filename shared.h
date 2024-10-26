@@ -8,6 +8,7 @@
 #define WELCOME_PAGE 0
 #define GAME_PAGE 1
 #define SETTINGS_PAGE 2
+#define GAME_OVER_PAGE 3
 #define LEVELS_FILE ":/levels.json"
 #define MAP_BLANK 0
 #define MAP_WALL 1
@@ -46,11 +47,7 @@ enum GhostState
 class Shared
 {
 public:
-    friend class Pacman;
-    friend class GamePage;
-    friend class MainWindow;
-    friend class SettingsPage;
-private:
+    static uint score;
     static QStack<int> pageIndexStack;
     static QMap<keyActions, int> keyBindings;
     static const QMap<keyActions, int> defaultBindings;

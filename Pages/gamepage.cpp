@@ -28,7 +28,6 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     scene(new QGraphicsScene(this)),
     player_timer(new QTimer(this)),
     power_up_timer(new QTimer(this)),
-    score(0),
     ghosts
     {
         new Blinky(cellSize, {7,15}, {5, 15}),
@@ -41,6 +40,7 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     ui->graphicsView->setScene(scene);
     loadLevel(current_level);
     drawMapGrid();
+    Shared::score = 0;
     scene->addItem(pacman);
     for (int i = 0; i < NO_OF_GHOSTS; ++i)
     {
@@ -87,7 +87,7 @@ GamePage::~GamePage()
 
 void GamePage::updateScore()
 {
-    ui->label->setText("SCORE: " + QString::number(score));
+    ui->label->setText("SCORE: " + QString::number(Shared::score));
 }
 
 std::pair<Tile*, Collectable*> processGridValue(int val, std::pair<int, int> pos)
@@ -233,25 +233,25 @@ void GamePage::handlePacmanCollision()
 
 void GamePage::newLifeRestart()
 {
-    pacman->setPos(cellSize, cellSize);
+    pacman->reset();
     for (auto ghost : ghosts)
     {
         ghost->returnToSpawn();
     }
 }
 
-// everything in switch cases to be done
 void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
 {
     for (const auto &item : collisions)
     {
         Ghost* ghost = dynamic_cast<Ghost*>(item);
+        qDebug() << (void*)ghost;
         if(ghost)
         {
             switch (ghost->getState()) {
             case EDIBLE:
                 ghost->returnToSpawn();
-                score += 200; // placeholder
+                Shared::score += 200; // placeholder
                 break;
             case INEDIBLE:
                 if(pacman->loseLife())
@@ -261,6 +261,7 @@ void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
                 else
                 {
                     gameOver();
+                    return;
                 }
                 break;
             }
@@ -270,12 +271,13 @@ void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
 
 void GamePage::gameOver()
 {
-    qDebug() << "WTF";
+    resetGame();
+    Shared::pageIndexStack.push(GAME_OVER_PAGE);
+    layout_ref->setCurrentIndex(GAME_OVER_PAGE);
 }
 
 void GamePage::resetGame()
 {
-    score = 0;
     current_level = 1;
     foreach(QGraphicsItem *item, scene->items())
     {
@@ -307,7 +309,7 @@ void GamePage::collectCollectables(const QList<QGraphicsItem*> &collisions)
                 powerUpMode();
             }
             auto it = std::find(collectables.begin(), collectables.end(), collectable);
-            score += collectable->getScore();
+            Shared::score += collectable->getScore();
             scene->removeItem(item);
             collectables.erase(it);
         }

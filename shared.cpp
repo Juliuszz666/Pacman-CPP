@@ -2,6 +2,8 @@
 
 QStack<int> Shared::pageIndexStack;
 
+uint Shared::score;
+
 const QMap<keyActions, int> Shared::defaultBindings =
 {
         {MVUP, 'W'},

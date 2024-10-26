@@ -6,6 +6,7 @@
 
 class GamePage;
 class SettingsPage;
+class GameOverPage;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,6 +27,7 @@ private:
 
     GamePage* game_page;
     SettingsPage* settings_page;
+    GameOverPage* game_over_page;
     void connectButtons();
 
     Ui::MainWindow *ui;

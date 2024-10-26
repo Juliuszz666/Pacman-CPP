@@ -34,7 +34,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Entities/clyde.h            Entities/clyde.cpp
         Entities/inky.h             Entities/inky.cpp
         Entities/pinky.h            Entities/pinky.cpp
-        Pages/gameoverpage.h        Pages/gameoverpage.cpp          #Pages/gameoverpage.ui
+        Pages/gameoverpage.h        Pages/gameoverpage.cpp          Pages/gameoverpage.ui
         Pages/gamepage.h            Pages/gamepage.cpp              Pages/gamepage.ui
         Pages/mainwindow.h          Pages/mainwindow.cpp            Pages/mainwindow.ui
         Pages/settingspage.h        Pages/settingspage.cpp          Pages/settingspage.ui

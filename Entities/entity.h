@@ -37,9 +37,9 @@ public:
     const std::map<moveDirections, qreal> rotations =
         {
             {RIGHT, 0},
-            {UP, -90},
-            {LEFT, 180},
-            {DOWN, 90}
+            {UP,    -90},
+            {LEFT,  180},
+            {DOWN,  90}
         };
 
 protected:

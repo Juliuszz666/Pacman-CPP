@@ -1,22 +1,70 @@
 #include "pacman.h"
 #include <QMessageBox>
+#include <QTimer>
 #include "../MapElements/tile.h"
 
 Pacman::Pacman(const int size, const std::pair<int, int> ini_pos) :
     Entity(size, ini_pos, ":/img/pacman.png"),
-    number_of_lives(3)
-{}
+    number_of_lives(3),
+    animation_timer(new QTimer(nullptr)),
+    animation(false)
+{
+    animation_timer->start(150);
+    connect(animation_timer, &QTimer::timeout, this, &Pacman::animate);
+}
+
+Pacman::~Pacman()
+{
+    delete animation_timer;
+}
+
+void Pacman::setAnimatedPixmap()
+{
+    setPixmap(QPixmap(":/img/pacmananimated.png").scaled(size, size, Qt::KeepAspectRatio));
+}
+
+void Pacman::setNormalPixmap()
+{
+    setPixmap(QPixmap(":/img/pacman.png").scaled(size, size, Qt::KeepAspectRatio));
+}
 
 void Pacman::move()
 {
     if(direction == NONE) return;
+    animation = false;
     auto [x_v, y_v] = dir_vec[direction] * SPEED_CO;
     int x = pos().x();
     int y = pos().y();
     if(canMove(dir_vec[direction]))
     {
+        animation = true;
         setPos(x + x_v, y + y_v);
     }
+}
+
+void Pacman::animate()
+{
+    if(direction == NONE) return;
+    if(!animation)
+    {
+        setNormalPixmap();
+    }
+    else
+    {
+        static bool state = true;
+        if(state)
+        {
+            setAnimatedPixmap();
+            state = false;
+        }
+        else
+        {
+            setNormalPixmap();
+            state = true;
+        }
+    }
+    originalPixmap = pixmap();
+    rotateEntity(rotations.at(direction));
 }
 
 void Pacman::reset()
@@ -24,6 +72,7 @@ void Pacman::reset()
     setPos(size, size);
     direction = NONE;
     setZValue(1.0);
+    setNormalPixmap();
     rotateEntity(rotations.at(RIGHT));
 }
 

@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "settingspage.h"
+#include "gameoverpage.h"
 #include "gamepage.h"
 #include "../shared.h"
 #include <QMessageBox>
@@ -28,8 +29,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     game_page = new GamePage(this, ui->stackedWidget);
     settings_page = new SettingsPage(this, ui->stackedWidget);
+    game_over_page = new GameOverPage(this, ui->stackedWidget);
     ui->stackedWidget->addWidget(game_page);
     ui->stackedWidget->addWidget(settings_page);
+    ui->stackedWidget->addWidget(game_over_page);
     ui->stackedWidget->setCurrentWidget(ui->welcome_page);
     Shared::pageIndexStack.push(WELCOME_PAGE);
     connectButtons();
@@ -45,6 +48,7 @@ void MainWindow::onBackButtonClicked()
     Shared::pageIndexStack.push(WELCOME_PAGE);
     ui->stackedWidget->setCurrentIndex(WELCOME_PAGE);
     game_page->resetGame();
+    Shared::score = 0;
 }
 
 void MainWindow::startButtonClicked()

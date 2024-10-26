@@ -28,7 +28,6 @@ private:
     QTimer * player_timer;
     QTimer * power_up_timer;
 
-    uint score;
     int current_level;
     int mapGrid[MAP_HEIGHT][MAP_WIDTH];
     Pacman *pacman;
