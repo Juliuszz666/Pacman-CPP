@@ -15,6 +15,7 @@ void criticalQuit(const char * msg)
 
 void MainWindow::connectButtons()
 {
+    connect(settings_page, &SettingsPage::backToGameSignal, this, &MainWindow::onBackToGame);
     connect(settings_page, &SettingsPage::backButtonClickedSignal, this, &MainWindow::onBackButtonClicked);
     connect(ui->startGameButton, &QPushButton::clicked, this, &MainWindow::startButtonClicked);
     connect(ui->quitButton, &QPushButton::clicked, this, &MainWindow::quitButtonClicked);
@@ -53,7 +54,7 @@ void MainWindow::onBackButtonClicked()
 
 void MainWindow::onBackToGame()
 {
-    //game_page->backToGame();
+    game_page->backToGame();
 }
 
 void MainWindow::startButtonClicked()

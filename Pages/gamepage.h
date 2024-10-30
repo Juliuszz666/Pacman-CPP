@@ -37,13 +37,12 @@ private:
 
     void connectTimers();
     void powerUpMode();
-    void drawMapGrid();
-    void loadLevel(int lvl_number);
-    void initializeGrid(const QJsonArray &jsonArr);
+    /*To be moved to MapLoader class*/ void drawMapGrid();
+    /*To be moved to MapLoader class*/ void loadLevel(int lvl_number);
+    /*To be moved to MapLoader class*/ void initializeGrid(const QJsonArray &jsonArr);
     void gameOver();
     void newLifeRestart();
 private slots:
-    void backTogame();
     void endPowerUpMode();
     void handlePacmanCollision();
     void collectCollectables(const QList<QGraphicsItem*> &collisions);
@@ -53,7 +52,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 public slots:
     void run();
-    //void backToGame();
+    void backToGame();
 public:
     void resetGame();
     GamePage(QWidget *parent = nullptr, QStackedWidget* ref = nullptr);

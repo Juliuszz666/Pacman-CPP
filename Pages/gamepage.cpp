@@ -16,7 +16,7 @@
 #include "../Entities/inky.h"
 #include "../Entities/pinky.h"
 
-void criticalQuit(const char * msg);
+extern void criticalQuit(const char * msg);
 const int cellSize = 20;
 
 GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
@@ -90,12 +90,10 @@ void GamePage::updateScore()
     ui->label->setText("SCORE: " + QString::number(Shared::score));
 }
 
-/*
 void GamePage::backToGame()
 {
     player_timer->start(TIMER_COLAPSE_TIME);
 }
-*/
 
 std::pair<Tile*, Collectable*> processGridValue(int val, std::pair<int, int> pos)
 {
@@ -253,7 +251,6 @@ void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
     for (const auto &item : collisions)
     {
         Ghost* ghost = dynamic_cast<Ghost*>(item);
-        qDebug() << (void*)ghost;
         if(ghost)
         {
             switch (ghost->getState()) {
