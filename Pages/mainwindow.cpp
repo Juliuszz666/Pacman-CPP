@@ -51,6 +51,11 @@ void MainWindow::onBackButtonClicked()
     Shared::score = 0;
 }
 
+void MainWindow::onBackToGame()
+{
+    //game_page->backToGame();
+}
+
 void MainWindow::startButtonClicked()
 {
     Shared::pageIndexStack.push(GAME_PAGE);

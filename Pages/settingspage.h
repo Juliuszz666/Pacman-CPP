@@ -33,6 +33,7 @@ private:
     void bindKey();
 
 signals:
+    void backToGameSignal();
     void backButtonClickedSignal();
 
 protected:

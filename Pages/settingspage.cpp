@@ -107,6 +107,7 @@ void SettingsPage::keyPressEvent(QKeyEvent * event)
             if(Shared::pageIndexStack.top() == GAME_PAGE)
             {
                 layout_ref->setCurrentIndex(GAME_PAGE);
+                emit backToGameSignal();
             }
             else
             {

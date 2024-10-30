@@ -43,6 +43,7 @@ private:
     void gameOver();
     void newLifeRestart();
 private slots:
+    void backTogame();
     void endPowerUpMode();
     void handlePacmanCollision();
     void collectCollectables(const QList<QGraphicsItem*> &collisions);
@@ -52,6 +53,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 public slots:
     void run();
+    //void backToGame();
 public:
     void resetGame();
     GamePage(QWidget *parent = nullptr, QStackedWidget* ref = nullptr);

@@ -90,6 +90,13 @@ void GamePage::updateScore()
     ui->label->setText("SCORE: " + QString::number(Shared::score));
 }
 
+/*
+void GamePage::backToGame()
+{
+    player_timer->start(TIMER_COLAPSE_TIME);
+}
+*/
+
 std::pair<Tile*, Collectable*> processGridValue(int val, std::pair<int, int> pos)
 {
     Collectable * item = nullptr;
@@ -183,6 +190,7 @@ void GamePage::keyPressEvent(QKeyEvent *event)
     static bool paused = false;
     if(key == Shared::keyBindings[SETTINGS])
     {
+        player_timer->stop();
         Shared::pageIndexStack.push(SETTINGS_PAGE);
         layout_ref->setCurrentIndex(SETTINGS_PAGE);
     }

@@ -20,6 +20,7 @@ public:
     ~MainWindow();
 private slots:
     void onBackButtonClicked();
+    void onBackToGame();
 private:
     void startButtonClicked();
     void quitButtonClicked();
