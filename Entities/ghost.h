@@ -24,7 +24,7 @@ protected:
 public:
     QTimer* reset_timer;
     GhostState getState() {return state;}
-    void setState(GhostState newstate) {this->state = newstate;}
+    void setState(GhostState newstate);
     void getPacmanPos(QPoint pos) {this->pacman_pos = pos;}
     void returnToSpawn();
     virtual void move() override = 0;

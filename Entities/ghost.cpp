@@ -18,6 +18,43 @@ Ghost::Ghost(const int size,
     name(name)
 {}
 
+QString getDirStr(moveDirections direction)
+{
+    QString dir_str;
+    switch (direction) {
+    case LEFT:
+        return "left";
+        break;
+    case UP:
+        return "up";
+        break;
+    case RIGHT:
+        return "right";
+        break;
+    case DOWN:
+        return "down";
+        break;
+    default:
+        return "";
+    }
+}
+
+void Ghost::setState(GhostState newState)
+{
+    this->state = newState;
+    switch (newState) {
+    case EDIBLE:
+        setPixmap(QPixmap(":/img/ghost_edible.png").scaled(size, size, Qt::KeepAspectRatio));
+        break;
+    case INEDIBLE:
+        QString dir_str = getDirStr(direction);
+        setPixmap(QPixmap(":/img/" + name + dir_str + ".png").scaled(size, size, Qt::KeepAspectRatio));
+        break;
+    }
+    setZValue(1.0);
+    originalPixmap = pixmap();
+}
+
 bool Ghost::canMove(DirVectors dir_vec)
 {
     int x = pos().x();
@@ -41,23 +78,8 @@ bool Ghost::canMove(DirVectors dir_vec)
 
 void Ghost::rotateEntity(qreal angle)
 {
-    QString dir_str;
-    switch (direction) {
-    case LEFT:
-        dir_str = "left";
-        break;
-    case UP:
-        dir_str = "up";
-        break;
-    case RIGHT:
-        dir_str = "right";
-        break;
-    case DOWN:
-        dir_str = "down";
-        break;
-    default:
-        return;
-    }
+    if(state == EDIBLE) return;
+    QString dir_str = getDirStr(direction);
     setPixmap(QPixmap(":/img/" + name + dir_str + ".png").scaled(size, size, Qt::KeepAspectRatio));
     setZValue(1.0);
 }
@@ -71,7 +93,7 @@ void Ghost::returnToSpawn()
     connect(reset_timer, &QTimer::destroyed, reset_timer, &QTimer::deleteLater);
     connect(reset_timer, &QTimer::timeout, this, [&]()
     {
-                state = INEDIBLE;
+        setState(INEDIBLE);
     });
 }
 

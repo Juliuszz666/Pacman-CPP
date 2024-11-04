@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QFile>
 #include <QTimer>
+#include "maploader.h"
 #include "../MapElements/collectable.h"
 #include "../MapElements/tile.h"
 #include "../Entities/blinky.h"
@@ -38,7 +39,7 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
 {
     ui->setupUi(this);
     ui->graphicsView->setScene(scene);
-    loadLevel(current_level);
+    MapLoader::loadLevel(mapGrid, current_level);
     drawMapGrid();
     Shared::score = 0;
     scene->addItem(pacman);
@@ -143,43 +144,6 @@ void GamePage::drawMapGrid()
             }
         }
     }
-}
-
-void GamePage::initializeGrid(const QJsonArray &jsonArr)
-{
-    if (jsonArr.size() != MAP_HEIGHT || jsonArr[0].toArray().size() != MAP_WIDTH)
-    {
-        criticalQuit("File with level corrupted");
-    }
-    for (int i = 0; i < MAP_HEIGHT; ++i)
-    {
-        QJsonArray row = jsonArr[i].toArray();
-        for (int j = 0; j < MAP_WIDTH; ++j)
-        {
-            mapGrid[i][j] = row[j].toInt();
-        }
-    }
-}
-
-
-void GamePage::loadLevel(int level_number)
-{
-    QFile jsonFile(LEVELS_FILE);
-    if (!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        criticalQuit("Couldn't load level. Program will be terminated");
-    }
-    QByteArray fileData = jsonFile.readAll();
-    jsonFile.close();
-
-    QJsonDocument document = QJsonDocument::fromJson(fileData);
-    if (!document.isObject()) {
-        criticalQuit("Couldn't load level. Program will be terminated");
-    }
-
-    QJsonObject jsonObj = document.object();
-    QJsonArray gridArray = jsonObj[QString("lvl_%1").arg(level_number)].toArray();
-    initializeGrid(gridArray);
 }
 
 void GamePage::keyPressEvent(QKeyEvent *event)
@@ -292,7 +256,7 @@ void GamePage::resetGame()
             delete item;
         }
     }
-    loadLevel(current_level);
+    MapLoader::loadLevel(mapGrid, current_level);
     drawMapGrid();
     for (auto ghost : ghosts)
     {

@@ -8,8 +8,8 @@
 #include "../Entities/pacman.h"
 #include "../Entities/ghost.h"
 #include "../MapElements/collectable.h"
-#define MAP_WIDTH 30
-#define MAP_HEIGHT 20
+#include "../shared.h"
+
 #define NO_OF_GHOSTS 4
 
 using std::vector;
@@ -37,9 +37,7 @@ private:
 
     void connectTimers();
     void powerUpMode();
-    /*To be moved to MapLoader class*/ void drawMapGrid();
-    /*To be moved to MapLoader class*/ void loadLevel(int lvl_number);
-    /*To be moved to MapLoader class*/ void initializeGrid(const QJsonArray &jsonArr);
+    void drawMapGrid();
     void gameOver();
     void newLifeRestart();
 private slots:

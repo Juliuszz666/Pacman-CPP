@@ -22,6 +22,7 @@
 	<file>img/clydeleft.png</file>
 	<file>img/powerup.png</file>
 	<file>img/food.png</file>
+	<file>img/ghost_edible.png</file>
     <file>mp3/testmusic.mp3</file>
     </qresource>
 </RCC>

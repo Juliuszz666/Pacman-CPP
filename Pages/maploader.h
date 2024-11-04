@@ -6,9 +6,8 @@
 class MapLoader
 {
 public:
-    static void drawMapGrid();
-    static void loadLevel(int lvl_number);
-    static void initializeGrid(const QJsonArray &jsonArr);
+    static void loadLevel(int (&mapGrid)[20][30], int lvl_number);
+    static void initializeGrid(int (&grid)[20][30], const QJsonArray &jsonArr);
     MapLoader() = default;
 };
 
