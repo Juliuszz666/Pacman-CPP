@@ -34,7 +34,7 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
         new Blinky(cellSize, {7,15}, {5, 15}),
         new Clyde(cellSize, {7, 14}, {5, 15}),
         new Inky(cellSize, {7, 16}, {5, 15}),
-        new Pinky(cellSize, {5, 15}, {5, 15})
+        new Pinky(cellSize, {7, 13}, {5, 15})
     }
 {
     ui->setupUi(this);
@@ -230,6 +230,7 @@ void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
                 else
                 {
                     gameOver();
+                    emit gameOverSignal();
                     return;
                 }
                 break;

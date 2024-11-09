@@ -121,5 +121,8 @@ void Pinky::move()
     auto [x_v, y_v] = dir_vec[direction] * SPEED_CO;
     int x = pos().x();
     int y = pos().y();
-    setPos(x + x_v, y + y_v);
+    if(canMove(dir_vec[direction]))
+    {
+        setPos(x + x_v, y + y_v);
+    }
 }

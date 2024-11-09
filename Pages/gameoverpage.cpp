@@ -9,8 +9,6 @@ GameOverPage::GameOverPage(QWidget *parent, QStackedWidget* _layout_ref)
 {
     ui->setupUi(this);
     connectButtons();
-    ui->scoreLabel->setText("You score is: " + QString::number(Shared::score));
-    Shared::score = 0;
 }
 
 GameOverPage::~GameOverPage()
@@ -22,6 +20,12 @@ void GameOverPage::connectButtons()
 {
     connect(ui->quitButton, &QPushButton::clicked, this, &GameOverPage::quit);
     connect(ui->menuButton, &QPushButton::clicked, this, &GameOverPage::backToMenu);
+}
+
+void GameOverPage::displayScore()
+{
+    ui->scoreLabel->setText("You score is: " + QString::number(Shared::score));
+    Shared::score = 0;
 }
 
 void GameOverPage::backToMenu()

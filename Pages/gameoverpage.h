@@ -18,6 +18,8 @@ private:
 private slots:
     void quit();
     void backToMenu();
+public slots:
+    void displayScore();
 public:
     GameOverPage(QWidget *parent = nullptr, QStackedWidget* layout_ref = nullptr);
     ~GameOverPage();

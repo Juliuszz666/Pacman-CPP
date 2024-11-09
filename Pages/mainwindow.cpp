@@ -20,6 +20,7 @@ void MainWindow::connectButtons()
     connect(ui->startGameButton, &QPushButton::clicked, this, &MainWindow::startButtonClicked);
     connect(ui->quitButton, &QPushButton::clicked, this, &MainWindow::quitButtonClicked);
     connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::settingsButtonClicked);
+    connect(game_page, &GamePage::gameOverSignal, game_over_page, &GameOverPage::displayScore);
 }
 
 MainWindow::MainWindow(QWidget *parent) :

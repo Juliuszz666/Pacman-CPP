@@ -15,12 +15,12 @@ Ghost::Ghost(const int size,
     reset_timer(new QTimer(nullptr)),
     pacman_pos({}),
     gate_pos(g_pos),
-    name(name)
+    name(name),
+    eaten(false)
 {}
 
 QString getDirStr(moveDirections direction)
 {
-    QString dir_str;
     switch (direction) {
     case LEFT:
         return "left";
@@ -57,6 +57,7 @@ void Ghost::setState(GhostState newState)
 
 bool Ghost::canMove(DirVectors dir_vec)
 {
+    if(eaten) return false;
     int x = pos().x();
     int y = pos().y();
     auto [x_test, y_test] = dir_vec * SPEED_CO;
@@ -89,11 +90,16 @@ void Ghost::returnToSpawn()
     reset_timer->start(RESET_TIME);
     setPos(spawn_pos.second * size, spawn_pos.first * size);
     setDir(UP);
+    setPixmap(QPixmap(":/img/" + name + "up.png").scaled(size, size, Qt::KeepAspectRatio));
+    originalPixmap = pixmap();
+    setZValue(1.0);
+    eaten = true;
     connect(reset_timer, &QTimer::timeout, reset_timer, &QTimer::stop);
     connect(reset_timer, &QTimer::destroyed, reset_timer, &QTimer::deleteLater);
     connect(reset_timer, &QTimer::timeout, this, [&]()
     {
         setState(INEDIBLE);
+        eaten = false;
     });
 }
 

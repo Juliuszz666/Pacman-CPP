@@ -18,6 +18,7 @@ protected:
     QPoint pacman_pos;
     bool noSpawnGate();
     bool out_of_spawn;
+    bool eaten;
     std::pair<int,int> spawn_pos;
     std::pair<int,int> gate_pos;
     QString name;

@@ -38,8 +38,8 @@ private:
     void connectTimers();
     void powerUpMode();
     void drawMapGrid();
-    void gameOver();
     void newLifeRestart();
+    void gameOver();
 private slots:
     void endPowerUpMode();
     void handlePacmanCollision();
@@ -51,6 +51,8 @@ protected:
 public slots:
     void run();
     void backToGame();
+signals:
+    void gameOverSignal();
 public:
     void resetGame();
     GamePage(QWidget *parent = nullptr, QStackedWidget* ref = nullptr);
