@@ -26,6 +26,8 @@ constexpr int POWER_UP_TIME = 10'000;                   //ms
 
 constexpr int PACMAN_LIVES_DEFAULT = 3;
 
+constexpr int CELL_SIZE = 20;
+
 enum keyActions
 {
     MVUP,

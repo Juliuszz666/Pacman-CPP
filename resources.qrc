@@ -3,26 +3,27 @@
         <file>stylesheet.qss</file>
         <file>levels.json</file>
         <file>img/pacman.png</file>
-	<file>img/pacmananimated.png</file>
-	<file>img/blinkyup.png</file>
-	<file>img/blinkyleft.png</file>
-	<file>img/blinkydown.png</file>
-	<file>img/blinkyright.png</file>
-	<file>img/pinkyup.png</file>
-	<file>img/pinkydown.png</file>
-	<file>img/pinkyright.png</file>
-	<file>img/pinkyleft.png</file>
-	<file>img/inkyup.png</file>
-	<file>img/inkydown.png</file>
-	<file>img/inkyright.png</file>
-	<file>img/inkyleft.png</file>
-	<file>img/clydeup.png</file>
-	<file>img/clydedown.png</file>
-	<file>img/clyderight.png</file>
-	<file>img/clydeleft.png</file>
-	<file>img/powerup.png</file>
-	<file>img/food.png</file>
-	<file>img/ghost_edible.png</file>
-    <file>mp3/testmusic.mp3</file>
+        <file>img/pacmananimated.png</file>
+        <file>img/blinkyup.png</file>
+        <file>img/blinkyleft.png</file>
+        <file>img/blinkydown.png</file>
+        <file>img/blinkyright.png</file>
+        <file>img/pinkyup.png</file>
+        <file>img/pinkydown.png</file>
+        <file>img/pinkyright.png</file>
+        <file>img/pinkyleft.png</file>
+        <file>img/inkyup.png</file>
+        <file>img/inkydown.png</file>
+        <file>img/inkyright.png</file>
+        <file>img/inkyleft.png</file>
+        <file>img/clydeup.png</file>
+        <file>img/clydedown.png</file>
+        <file>img/clyderight.png</file>
+        <file>img/clydeleft.png</file>
+        <file>img/powerup.png</file>
+        <file>img/food.png</file>
+        <file>img/ghost_edible.png</file>
+        <file>mp3/testmusic.mp3</file>
+        <file>img/heart.png</file>
     </qresource>
 </RCC>

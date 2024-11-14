@@ -41,6 +41,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MapElements/collectable.h   MapElements/collectable.cpp
         MapElements/tile.h          MapElements/tile.cpp
         Pages/maploader.h           Pages/maploader.cpp
+        Pages/collisionhandler.h    Pages/collisionhandler.cpp
 
 
     )

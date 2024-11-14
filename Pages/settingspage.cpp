@@ -2,9 +2,12 @@
 #include "./ui_settingspage.h"
 #include <QMessageBox>
 
-#define MIN_VOL 0
-#define MAX_VOL 100
-#define DEF_VOL 0
+#define MUSIC_SRC QUrl("qrc:/mp3/testmusic.mp3")
+#define PERCENT_OF(X) (X/qreal(100.0))
+
+constexpr int MIN_VOL = 0;
+constexpr int MAX_VOL = 100;
+constexpr int DEF_VOL = 0;
 
 SettingsPage::SettingsPage(QWidget *parent, QStackedWidget* ref) :
     QWidget(parent),
@@ -49,14 +52,14 @@ void SettingsPage::checkDuplicates()
 void SettingsPage::setUpMusic()
 {
     music_player->setAudioOutput(audio_output.get());
-    music_player->setSource(QUrl("qrc:/mp3/testmusic.mp3"));
+    music_player->setSource(MUSIC_SRC);
     music_player->play();
-    audio_output->setVolume((qreal)DEF_VOL/100);
+    audio_output->setVolume(PERCENT_OF(DEF_VOL));
 }
 
 void SettingsPage::changeVolume()
 {
-    qreal vol = QAudio::convertVolume(ui->volumeSlider->value() / qreal(100.0), QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale);
+    qreal vol = QAudio::convertVolume(PERCENT_OF(ui->volumeSlider->value()), QAudio::LogarithmicVolumeScale, QAudio::LinearVolumeScale);
     audio_output->setVolume(vol);
 }
 

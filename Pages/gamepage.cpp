@@ -1,14 +1,6 @@
 #include "gamepage.h"
 #include "./ui_gamepage.h"
 #include "../shared.h"
-#include <QGraphicsRectItem>
-#include <QGraphicsPixmapItem>
-#include <QPixmap>
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QFile>
-#include <QTimer>
 #include "maploader.h"
 #include "../MapElements/collectable.h"
 #include "../MapElements/tile.h"
@@ -16,26 +8,37 @@
 #include "../Entities/clyde.h"
 #include "../Entities/inky.h"
 #include "../Entities/pinky.h"
+#include "collisionhandler.h"
+
+#define CURRENT_LEVEL_STR "Level: " + QString::number(current_level)
+#define CURRENT_SCORE_STR "SCORE: " + QString::number(Shared::score)
+#define HEART_FILE_STR ":/img/heart.png"
+#define DEFAULT_PINKY_SPAWN {7, 13}
+#define DEFAULT_BLINKY_SPAWN {7, 15}
+#define DEFAULT_INKY_SPAWN {7, 16}
+#define DEFAULT_CLYDE_SPAWN {7, 14}
+#define GHOST_GATE_POS {5, 15}
+#define DEFAULT_PACMAN_SPAWN {1, 1}
 
 extern void criticalQuit(const char * msg);
-const int cellSize = 20;
 
 GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     QWidget(parent),
     ui(new Ui::GamePage),
     current_level(1),
     layout_ref(ref),
-    pacman(new Pacman(cellSize, {1, 1})),
+    pacman(new Pacman(CELL_SIZE, DEFAULT_PACMAN_SPAWN)),
     scene(new QGraphicsScene(this)),
-    player_timer(new QTimer(this)),
+    game_timer(new QTimer(this)),
     power_up_timer(new QTimer(this)),
     max_level(MapLoader::getNoOfLevels()),
+    collision_handler(new CollisionHandler()),
     ghosts
     {
-        new Blinky(cellSize, {7,15}, {5, 15}),
-        new Clyde(cellSize, {7, 14}, {5, 15}),
-        new Inky(cellSize, {7, 16}, {5, 15}),
-        new Pinky(cellSize, {7, 13}, {5, 15})
+        new Blinky  (CELL_SIZE, DEFAULT_BLINKY_SPAWN,   GHOST_GATE_POS),
+        new Clyde   (CELL_SIZE, DEFAULT_CLYDE_SPAWN,    GHOST_GATE_POS),
+        new Inky    (CELL_SIZE, DEFAULT_INKY_SPAWN,     GHOST_GATE_POS),
+        new Pinky   (CELL_SIZE, DEFAULT_PINKY_SPAWN,    GHOST_GATE_POS)
     }
 {
     ui->setupUi(this);
@@ -52,80 +55,66 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     connectTimers();
 }
 
+GamePage::~GamePage()
+{
+    delete ui;
+    delete collision_handler;
+}
+
 void GamePage::connectTimers()
 {
-    Blinky* blinky =    static_cast<Blinky*>(ghosts[0]);
-    Clyde* clyde =      static_cast<Clyde*>(ghosts[1]);
-    Inky* inky =        static_cast<Inky*>(ghosts[2]);
     Pinky* pinky =      static_cast<Pinky*>(ghosts[3]);
     pinky->getPacmanPos(pacman->pos().toPoint());
     pinky->load_maze(mapGrid);
-    connect(player_timer,   &QTimer::timeout, pacman,           &Pacman::move);
-    connect(player_timer,   &QTimer::timeout, this,             &GamePage::handlePacmanCollision);
-    connect(player_timer,   &QTimer::timeout, this,             &GamePage::updateScore);
-    connect(player_timer,   &QTimer::timeout, pacman,           &Pacman::canChangeDir);
+    connect(game_timer,     &QTimer::timeout, this,             &GamePage::updateLives);
+    connect(game_timer,     &QTimer::timeout, pacman,           &Pacman::move);
+    connect(game_timer,     &QTimer::timeout, this,             &GamePage::callCollisionHandler);
+    connect(game_timer,     &QTimer::timeout, this,             &GamePage::updateScore);
+    connect(game_timer,     &QTimer::timeout, pacman,           &Pacman::canChangeDir);
     connect(power_up_timer, &QTimer::timeout, power_up_timer,   &QTimer::stop);
     connect(power_up_timer, &QTimer::timeout, this,             &GamePage::endPowerUpMode);
-    connect(player_timer,   &QTimer::timeout, blinky,           &Blinky::move);
-    connect(player_timer,   &QTimer::timeout, clyde,            &Clyde::move);
-    connect(player_timer,   &QTimer::timeout, inky,             &Inky::move);
-    connect(player_timer,   &QTimer::timeout, pinky,            &Pinky::move);
-    connect(player_timer,   &QTimer::timeout, this,             [&]() {
+    connect(game_timer,     &QTimer::timeout, this,             [&]() {
         for (int i = 0; i < NO_OF_GHOSTS; ++i)
         {
+            ghosts[i]->move();
             ghosts[i]->getPacmanPos(pacman->pos().toPoint());
         }
     });
 }
 
-void GamePage::run()
+void GamePage::updateLives()
 {
-    player_timer->start(TIMER_COLAPSE_TIME);
+    for (auto heart : heart_icons) {
+        scene->removeItem(heart);
+        delete heart;
+    }
+    heart_icons.clear();
+    for (int i = 0; i < pacman->getLife(); ++i) {
+        QGraphicsPixmapItem *heart = new QGraphicsPixmapItem(QPixmap(HEART_FILE_STR).scaled(CELL_SIZE, CELL_SIZE));
+        heart->setPos(i * 30, -30);
+        scene->addItem(heart);
+        heart_icons.append(heart);
+    }
 }
 
-GamePage::~GamePage()
+void GamePage::callCollisionHandler()
 {
-    delete ui;
+    this->collision_handler->handlePacmanCollisions(this);
+}
+
+void GamePage::run()
+{
+    game_timer->start(TIMER_COLAPSE_TIME);
 }
 
 void GamePage::updateScore()
 {
-    ui->label->setText("SCORE: " + QString::number(Shared::score));
+    ui->label->setText(CURRENT_SCORE_STR);
 }
 
 void GamePage::backToGame()
 {
-    player_timer->start(TIMER_COLAPSE_TIME);
-}
-
-std::pair<Tile*, Collectable*> processGridValue(int val, std::pair<int, int> pos)
-{
-    Collectable * item = nullptr;
-    Tile * tile = nullptr;
-    auto [i, j] = pos;
-    switch (val) {
-    case MAP_BLANK:
-        tile = new Tile(FLOOR, cellSize, {i, j});
-        break;
-    case MAP_WALL:
-        tile = new Tile(WALL, cellSize, {i, j});
-        break;
-    case MAP_FOOD:
-        tile = new Tile(FLOOR, cellSize, {i, j});
-        item = new Collectable(FOOD, 1, cellSize, {i ,j});
-        break;
-    case MAP_POWER_UP:
-        tile = new Tile(FLOOR, cellSize, {i, j});
-        item = new Collectable(POWER_UP, 25, cellSize, {i, j});
-        break;
-    case __GHOST_GATE:
-        tile = new Tile(GHOST_GATE, cellSize, {i, j});
-        break;
-    default:
-        criticalQuit("Level file corrupted");
-        break;
-    }
-    return std::make_pair(tile, item);
+    game_timer->start(TIMER_COLAPSE_TIME);
 }
 
 void GamePage::drawMapGrid()
@@ -134,7 +123,7 @@ void GamePage::drawMapGrid()
     {
         for (int j = 0; j < MAP_WIDTH; ++j)
         {
-            auto [tile, item] = processGridValue(mapGrid[i][j], {i, j});
+            auto [tile, item] = MapLoader::processGridValue(mapGrid[i][j], {i, j});
             if(tile)
             {
                 scene->addItem(tile);
@@ -154,7 +143,7 @@ void GamePage::keyPressEvent(QKeyEvent *event)
     static bool paused = false;
     if(key == Shared::keyBindings[SETTINGS])
     {
-        player_timer->stop();
+        game_timer->stop();
         Shared::pageIndexStack.push(SETTINGS_PAGE);
         layout_ref->setCurrentIndex(SETTINGS_PAGE);
     }
@@ -165,12 +154,12 @@ void GamePage::keyPressEvent(QKeyEvent *event)
     else if(key == Shared::keyBindings[MVRIGHT])    new_dir = RIGHT;
     else if (key == Shared::keyBindings[PAUSE] && paused)
     {
-        player_timer->start(TIMER_COLAPSE_TIME);
+        game_timer->start(TIMER_COLAPSE_TIME);
         paused = false;
     }
     else if (key == Shared::keyBindings[PAUSE] && !paused)
     {
-        player_timer->stop();
+        game_timer->stop();
         paused = true;
     }
     if(!pacman->setDir(new_dir))
@@ -196,48 +185,12 @@ void GamePage::powerUpMode()
     }
 }
 
-void GamePage::handlePacmanCollision()
-{
-    QList<QGraphicsItem*> collisions = pacman->collidingItems();
-    collectCollectables(collisions);
-    ghostCollisions(collisions);
-}
-
 void GamePage::newLifeRestart()
 {
     pacman->reset();
     for (auto ghost : ghosts)
     {
         ghost->returnToSpawn();
-    }
-}
-
-void GamePage::ghostCollisions(const QList<QGraphicsItem*> &collisions)
-{
-    for (const auto &item : collisions)
-    {
-        Ghost* ghost = dynamic_cast<Ghost*>(item);
-        if(ghost)
-        {
-            switch (ghost->getState()) {
-            case EDIBLE:
-                ghost->returnToSpawn();
-                Shared::score += 200; // placeholder
-                break;
-            case INEDIBLE:
-                if(pacman->loseLife())
-                {
-                    newLifeRestart();
-                }
-                else
-                {
-                    gameOver();
-                    emit gameOverSignal();
-                    return;
-                }
-                break;
-            }
-        }
     }
 }
 
@@ -267,7 +220,7 @@ void GamePage::resetGame()
         ghost->setZValue(1.0);
     }
     pacman->reset();
-    pacman->setLives(3);
+    pacman->setLives(PACMAN_LIVES_DEFAULT);
 }
 
 void GamePage::newLevel()
@@ -276,35 +229,5 @@ void GamePage::newLevel()
     MapLoader::loadLevel(mapGrid, current_level);
     drawMapGrid();
     resetGame();
-    ui->lvlLabel->setText("Level: " + QString::number(current_level));
-}
-
-void GamePage::collectCollectables(const QList<QGraphicsItem*> &collisions)
-{
-    for (const auto &item : collisions)
-    {
-        Collectable* collectable = dynamic_cast<Collectable*>(item);
-        if (collectable)
-        {
-            if(collectable->getType() == POWER_UP)
-            {
-                powerUpMode();
-            }
-            auto it = std::find(collectables.begin(), collectables.end(), collectable);
-            Shared::score += collectable->getScore();
-            scene->removeItem(item);
-            collectables.erase(it);
-        }
-    }
-    if(collectables.empty())
-    {
-        if(current_level == max_level)
-        {
-            gameOver();
-        }
-        else
-        {
-            newLevel();
-        }
-    }
+    ui->lvlLabel->setText(CURRENT_LEVEL_STR);
 }
