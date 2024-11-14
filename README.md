@@ -5,4 +5,4 @@
 ## App consists of
 1. Full fledged settings page
 2. Music
-3. Possibility of many versions of map (rescaling map possible)
+3. Possibility of many versions of map
