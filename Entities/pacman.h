@@ -1,6 +1,5 @@
 #ifndef PACMAN_H
 #define PACMAN_H
-#include "../shared.h"
 #include "entity.h"
 #include <QKeyEvent>
 
@@ -12,6 +11,7 @@ public:
     ~Pacman() override;
     bool loseLife() {return --number_of_lives;}
     uint getLife() {return number_of_lives;}
+    void setLives(int lives);
     void move() override;
     void reset();
 private:

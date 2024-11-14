@@ -42,3 +42,20 @@ void MapLoader::initializeGrid(int (&mapGrid)[20][30], const QJsonArray &jsonArr
         }
     }
 }
+
+int MapLoader::getNoOfLevels()
+{
+    QFile jsonFile(LEVELS_FILE);
+    if (!jsonFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+         criticalQuit("Couldn't load level. Program will be terminated");
+    }
+    QByteArray jsonData = jsonFile.readAll();
+    jsonFile.close();
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData);
+    if(doc.isNull() || !doc.isObject())
+    {
+        criticalQuit("Corrupted json file. Program will be terminated");
+    }
+    return doc.object().keys().size();
+}

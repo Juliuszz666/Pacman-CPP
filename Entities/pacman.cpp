@@ -1,15 +1,22 @@
 #include "pacman.h"
 #include <QMessageBox>
 #include <QTimer>
+#include "../shared.h"
 #include "../MapElements/tile.h"
+
+#define PACMAN_NORMAL_FILE_STR ":/img/pacman.png"
+#define PACMAN_ANIMATED_FILE_STR ":/img/pacmananimated.png"
+
+constexpr int ANIMATION_TIMER_MS = 150;
+
 
 Pacman::Pacman(const int size, const std::pair<int, int> ini_pos) :
     Entity(size, ini_pos, ":/img/pacman.png"),
-    number_of_lives(3),
+    number_of_lives(PACMAN_LIVES_DEFAULT),
     animation_timer(new QTimer(nullptr)),
     animation(false)
 {
-    animation_timer->start(150);
+    animation_timer->start(ANIMATION_TIMER_MS);
     connect(animation_timer, &QTimer::timeout, this, &Pacman::animate);
 }
 
@@ -18,14 +25,19 @@ Pacman::~Pacman()
     delete animation_timer;
 }
 
+void Pacman::setLives(int lives)
+{
+    this->number_of_lives = lives;
+}
+
 void Pacman::setAnimatedPixmap()
 {
-    setPixmap(QPixmap(":/img/pacmananimated.png").scaled(size, size, Qt::KeepAspectRatio));
+    SET_PIXMAP(PACMAN_ANIMATED_FILE_STR);
 }
 
 void Pacman::setNormalPixmap()
 {
-    setPixmap(QPixmap(":/img/pacman.png").scaled(size, size, Qt::KeepAspectRatio));
+    SET_PIXMAP(PACMAN_NORMAL_FILE_STR);
 }
 
 void Pacman::move()

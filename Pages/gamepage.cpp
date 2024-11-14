@@ -29,6 +29,7 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
     scene(new QGraphicsScene(this)),
     player_timer(new QTimer(this)),
     power_up_timer(new QTimer(this)),
+    max_level(MapLoader::getNoOfLevels()),
     ghosts
     {
         new Blinky(cellSize, {7,15}, {5, 15}),
@@ -39,6 +40,7 @@ GamePage::GamePage(QWidget *parent, QStackedWidget* ref) :
 {
     ui->setupUi(this);
     ui->graphicsView->setScene(scene);
+    ui->lvlLabel->setText("Level: " + QString::number(current_level));
     MapLoader::loadLevel(mapGrid, current_level);
     drawMapGrid();
     Shared::score = 0;
@@ -265,6 +267,16 @@ void GamePage::resetGame()
         ghost->setZValue(1.0);
     }
     pacman->reset();
+    pacman->setLives(3);
+}
+
+void GamePage::newLevel()
+{
+    current_level++;
+    MapLoader::loadLevel(mapGrid, current_level);
+    drawMapGrid();
+    resetGame();
+    ui->lvlLabel->setText("Level: " + QString::number(current_level));
 }
 
 void GamePage::collectCollectables(const QList<QGraphicsItem*> &collisions)
@@ -286,6 +298,13 @@ void GamePage::collectCollectables(const QList<QGraphicsItem*> &collisions)
     }
     if(collectables.empty())
     {
-        ui->label->setText("KONIEC");
+        if(current_level == max_level)
+        {
+            gameOver();
+        }
+        else
+        {
+            newLevel();
+        }
     }
 }

@@ -18,8 +18,12 @@
 #define MAP_WIDTH 30
 #define MAP_HEIGHT 20
 
-#define TIMER_COLAPSE_TIME (1000/30.0)      // 30 FPS
-#define POWER_UP_TIME 10'000                //ms
+constexpr double TIMER_COLAPSE_TIME = (1000/30.0);      // 30 FPS
+constexpr int POWER_UP_TIME = 10'000;                   //ms
+
+#define SET_PIXMAP(x) setPixmap(QPixmap(x).scaled(size, size, Qt::KeepAspectRatio))
+
+constexpr int PACMAN_LIVES_DEFAULT = 3;
 
 enum keyActions
 {

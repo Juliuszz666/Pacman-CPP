@@ -5,7 +5,7 @@
 
 #define MAP_WIDTH 30
 #define MAP_HEIGHT 20
-#define RESET_TIME 2000
+#define RESET_TIME 3500
 
 moveDirections leftTurn(moveDirections curr);
 moveDirections rightTurn(moveDirections curr);

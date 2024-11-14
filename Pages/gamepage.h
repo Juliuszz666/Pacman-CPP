@@ -29,12 +29,14 @@ private:
     QTimer * power_up_timer;
 
     int current_level;
+    int max_level;
     int mapGrid[MAP_HEIGHT][MAP_WIDTH];
     Pacman *pacman;
     Ghost *ghosts[NO_OF_GHOSTS];
 
     std::vector<Collectable*> collectables;
 
+    void newLevel();
     void connectTimers();
     void powerUpMode();
     void drawMapGrid();

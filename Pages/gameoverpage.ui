@@ -30,13 +30,16 @@
     </font>
    </property>
    <property name="text">
-    <string>YOU LOST!!!</string>
+    <string>GAME OVER!!!</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="scoreLabel">
    <property name="geometry">
     <rect>
-     <x>290</x>
+     <x>310</x>
      <y>190</y>
      <width>180</width>
      <height>40</height>
@@ -50,11 +53,14 @@
    <property name="text">
     <string>Your score is:</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
   </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>260</x>
      <y>250</y>
      <width>271</width>
      <height>38</height>
