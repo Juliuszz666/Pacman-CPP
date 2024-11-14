@@ -1,12 +1,18 @@
 #include "clyde.h"
 
+#define CLYDE_NAME "clyde"
+#define CLYDE_FILE_STR_DEFAULT ":/img/clyderight.png"
+
 Clyde::Clyde(const int size,
              const std::pair<int, int> ini_pos,
              const std::pair<int, int> gate_pos) :
-    Ghost(size, ini_pos, ":/img/clyderight.png", gate_pos, "clyde")
+    Ghost(size, ini_pos, CLYDE_FILE_STR_DEFAULT, gate_pos, CLYDE_NAME)
 {
     direction = RIGHT;
 }
+
+constexpr int RANDOM_RIGHT_CHANCE_CO = 3;
+constexpr int RANDOM_BACK_CHANCE_CO = 69;
 
 void Clyde::randomLikeMovement()
 {

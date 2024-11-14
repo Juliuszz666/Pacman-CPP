@@ -8,7 +8,7 @@ Entity::Entity(const int size, const std::pair<int, int> ini_pos, const QString 
 {
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFocus();
-    setPixmap(QPixmap(img_filename).scaled(size, size, Qt::KeepAspectRatio));
+    SET_PIXMAP(img_filename);
     auto [y, x] = ini_pos;
     setPos(x * size, y * size);
     originalPixmap = this->pixmap();

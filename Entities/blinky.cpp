@@ -1,9 +1,12 @@
 #include "blinky.h"
 
+#define BLINKY_NAME "blinky"
+#define BLINKY_FILE_STR_DEFAULT ":/img/blinkyup.png"
+
 Blinky::Blinky(const int size,
                const std::pair<int, int> ini_pos,
                const std::pair<int, int> gate_pos) :
-    Ghost(size, ini_pos, ":/img/blinkyup.png", gate_pos, "blinky")
+    Ghost(size, ini_pos, BLINKY_FILE_STR_DEFAULT, gate_pos, BLINKY_NAME)
 {
     direction = UP;
 }

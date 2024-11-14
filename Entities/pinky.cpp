@@ -3,8 +3,31 @@
 #include <QTimer>
 #include <queue>
 
+#define PINKY_NAME "pinky"
+#define PINKY_FILE_STR_DEFAULT ":/img/pinkyleft.png"
+
+#define VISIT_TILE_FUNCTION \
+    std::function<void(const path_t&, int, int, int, int)> visit_tile = \
+        [this, &BFS_queue, &visited] \
+        (const path_t& curr_path, int y, int x, int dy, int dx) \
+    { \
+        visited[y][x] = true; \
+        path_t new_path(curr_path); \
+        new_path.emplace_back(std::make_pair(y + dy, x + dx)); \
+        BFS_queue.push(new_path); \
+    }
+
+#define IS_WALL_FUNCTION \
+    std::function<bool(int, int)> is_wall = [this, &visited](int y, int x) \
+    { \
+        if(x < 0 || y < 0 || x > MAP_WIDTH - 1 || y > MAP_HEIGHT - 1) return true; \
+        return !(maze[y][x] ^ visited[y][x]); \
+    }
+
+constexpr int PACMAN_POS_INDICATOR = 2;
+
 Pinky::Pinky(const int size, const std::pair<int, int> ini_pos, const std::pair<int,int> gate_pos) :
-               Ghost(size, ini_pos, ":/img/pinkyleft.png", gate_pos, "pinky")
+               Ghost(size, ini_pos, PINKY_FILE_STR_DEFAULT, gate_pos, PINKY_NAME)
 {
 }
 
@@ -19,7 +42,7 @@ void Pinky::load_maze(const int map[MAP_HEIGHT][MAP_WIDTH])
     }
     int pac_x = pacman_pos.x() / size;
     int pac_y = pacman_pos.y() / size;
-    maze[pac_y][pac_x] = 2;
+    maze[pac_y][pac_x] = PACMAN_POS_INDICATOR;
 }
 
 void Pinky::updatePacmanPos()
@@ -28,12 +51,12 @@ void Pinky::updatePacmanPos()
     {
         for (int j = 0; j < MAP_WIDTH; ++j)
         {
-            maze[i][j] = maze[i][j] == 2 ? 1 : maze[i][j];
+            maze[i][j] = maze[i][j] == PACMAN_POS_INDICATOR ? 1 : maze[i][j];
         }
     }
     maze
         [static_cast<int>(std::floor(pacman_pos.y() / size))]
-        [static_cast<int>(std::floor(pacman_pos.x() / size))] = 2;
+        [static_cast<int>(std::floor(pacman_pos.x() / size))] = PACMAN_POS_INDICATOR;
 }
 
 path_t Pinky::BFS(int pinky_x, int pinky_y)
@@ -41,20 +64,8 @@ path_t Pinky::BFS(int pinky_x, int pinky_y)
     bool visited[MAP_HEIGHT][MAP_WIDTH] = {false};
     path_t                  path;
     std::queue<path_t>      BFS_queue;
-    std::function<bool(int, int)> is_wall = [this, &visited](int y, int x)
-    {
-        if(x < 0 || y < 0 || x > MAP_WIDTH - 1 || y > MAP_HEIGHT - 1) return true;
-        return !(maze[y][x] ^ visited[y][x]);
-    };
-    std::function<void(const path_t&, int, int, int, int)> visit_tile =
-        [this, &BFS_queue, &visited]
-        (const path_t& curr_path, int y, int x, int dy, int dx)
-    {
-        visited[y][x] = true;
-        path_t new_path(curr_path);
-        new_path.emplace_back(std::make_pair(y + dy, x + dx));
-        BFS_queue.push(new_path);
-    };
+    IS_WALL_FUNCTION;
+    VISIT_TILE_FUNCTION;
     BFS_queue.push({std::make_pair(pinky_y, pinky_x)});
     path_t best_path;
     while(!BFS_queue.empty())
@@ -62,7 +73,7 @@ path_t Pinky::BFS(int pinky_x, int pinky_y)
         path_t curr_path = BFS_queue.front();
         BFS_queue.pop();
         auto [cur_y, cur_x] = curr_path.back();
-        if(maze[cur_y][cur_x] == 2)
+        if(maze[cur_y][cur_x] == PACMAN_POS_INDICATOR)
         {
             best_path = curr_path;
             break;

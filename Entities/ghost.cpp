@@ -3,6 +3,8 @@
 #include <QTimer>
 #include <QPixmap>
 
+#define GHOST_EDBILE_FILE_STR ":/img/ghost_edible.png"
+
 Ghost::Ghost(const int size,
              const std::pair<int, int> ini_pos,
              const QString &img_filename,
@@ -44,11 +46,11 @@ void Ghost::setState(GhostState newState)
     this->state = newState;
     switch (newState) {
     case EDIBLE:
-        setPixmap(QPixmap(":/img/ghost_edible.png").scaled(size, size, Qt::KeepAspectRatio));
+        SET_PIXMAP(GHOST_EDBILE_FILE_STR);
         break;
     case INEDIBLE:
         QString dir_str = getDirStr(direction);
-        setPixmap(QPixmap(":/img/" + name + dir_str + ".png").scaled(size, size, Qt::KeepAspectRatio));
+        SET_PIXMAP(":/img/" + name + dir_str + ".png");
         break;
     }
     setZValue(1.0);
@@ -81,16 +83,16 @@ void Ghost::rotateEntity(qreal angle)
 {
     if(state == EDIBLE) return;
     QString dir_str = getDirStr(direction);
-    setPixmap(QPixmap(":/img/" + name + dir_str + ".png").scaled(size, size, Qt::KeepAspectRatio));
+    SET_PIXMAP(":/img/" + name + dir_str + ".png");
     setZValue(1.0);
 }
 
 void Ghost::returnToSpawn()
 {
-    reset_timer->start(RESET_TIME);
+    reset_timer->start(RESET_TIME_MS);
     setPos(spawn_pos.second * size, spawn_pos.first * size);
     setDir(UP);
-    setPixmap(QPixmap(":/img/" + name + "up.png").scaled(size, size, Qt::KeepAspectRatio));
+    SET_PIXMAP(":/img/" + name + "up.png");
     originalPixmap = pixmap();
     setZValue(1.0);
     eaten = true;

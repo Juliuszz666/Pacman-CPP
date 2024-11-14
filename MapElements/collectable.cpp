@@ -1,4 +1,8 @@
 #include "collectable.h"
+#include "../shared.h"
+
+#define FOOD_FILE_STR ":/img/food.png"
+#define POWER_UP_FILE_STR ":/img/powerup.png"
 
 Collectable::Collectable(const collectable_type type, const int score, const int size, std::pair<int, int> pos):
     type(type),
@@ -7,10 +11,10 @@ Collectable::Collectable(const collectable_type type, const int score, const int
 {
     switch (type) {
     case FOOD:
-        setPixmap(QPixmap(":/img/food.png").scaled(size, size, Qt::KeepAspectRatio));
+        SET_PIXMAP(FOOD_FILE_STR);
         break;
     case POWER_UP:
-        setPixmap(QPixmap(":/img/powerup.png").scaled(size, size, Qt::KeepAspectRatio));
+        SET_PIXMAP(POWER_UP_FILE_STR);
         break;
     }
     auto [y, x] = pos;

@@ -1,12 +1,17 @@
 #include "inky.h"
 
+#define INKY_NAME "inky"
+#define INKY_FILE_STR_DEFAULT ":/img/inkyleft.png"
+
 Inky::Inky(const int size,
            const std::pair<int, int> ini_pos,
            const std::pair<int,int> gate_pos) :
-    Ghost(size, ini_pos, ":/img/inkyleft.png", gate_pos, "inky")
+    Ghost(size, ini_pos, INKY_FILE_STR_DEFAULT, gate_pos, INKY_NAME)
 {
     direction = LEFT;
 }
+
+constexpr int RANDOM_BACK_CHANCE_CO = 420;
 
 void Inky::stickLeft()
 {
@@ -16,7 +21,7 @@ void Inky::stickLeft()
     }
     else if (canMove(dir_vec[direction]))
     {
-        if(std::rand() % 420 == 0 ) setDir(backTurn(direction));
+        if(std::rand() % RANDOM_BACK_CHANCE_CO == 0 ) setDir(backTurn(direction));
         else return;
     }
     else if (canMove(dir_vec[rightTurn(direction)]))

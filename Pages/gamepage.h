@@ -10,7 +10,7 @@
 #include "../MapElements/collectable.h"
 #include "../shared.h"
 
-#define NO_OF_GHOSTS 4
+constexpr int NO_OF_GHOSTS = 4;
 
 using std::vector;
 

@@ -11,7 +11,7 @@ constexpr int ANIMATION_TIMER_MS = 150;
 
 
 Pacman::Pacman(const int size, const std::pair<int, int> ini_pos) :
-    Entity(size, ini_pos, ":/img/pacman.png"),
+    Entity(size, ini_pos, PACMAN_NORMAL_FILE_STR),
     number_of_lives(PACMAN_LIVES_DEFAULT),
     animation_timer(new QTimer(nullptr)),
     animation(false)
@@ -25,7 +25,17 @@ Pacman::~Pacman()
     delete animation_timer;
 }
 
-void Pacman::setLives(int lives)
+uint Pacman::getLife()
+{
+    return number_of_lives;
+}
+
+bool Pacman::loseLife()
+{
+    return --number_of_lives;
+}
+
+void Pacman::setLives(uint lives)
 {
     this->number_of_lives = lives;
 }

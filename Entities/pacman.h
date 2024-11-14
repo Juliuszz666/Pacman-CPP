@@ -9,9 +9,9 @@ class Pacman : public Entity
 public:
     Pacman(const int size, const std::pair<int, int> ini_pos);
     ~Pacman() override;
-    bool loseLife() {return --number_of_lives;}
-    uint getLife() {return number_of_lives;}
-    void setLives(int lives);
+    bool loseLife();
+    uint getLife();
+    void setLives(uint lives);
     void move() override;
     void reset();
 private:

@@ -1,13 +1,14 @@
 #ifndef MAPLOADER_H
 #define MAPLOADER_H
+#include "../shared.h"
 
 #include <QJsonArray>
 
 class MapLoader
 {
 public:
-    static void loadLevel(int (&mapGrid)[20][30], int lvl_number);
-    static void initializeGrid(int (&grid)[20][30], const QJsonArray &jsonArr);
+    static void loadLevel(int (&mapGrid)[MAP_HEIGHT][MAP_WIDTH], int lvl_number);
+    static void initializeGrid(int (&grid)[MAP_HEIGHT][MAP_WIDTH], const QJsonArray &jsonArr);
     static int getNoOfLevels();
     MapLoader() = default;
 };

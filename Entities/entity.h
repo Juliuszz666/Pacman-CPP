@@ -34,6 +34,7 @@ public:
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
     virtual void move() = 0;
+    /* Unit of rotation degrees */
     const std::map<moveDirections, qreal> rotations =
         {
             {RIGHT, 0},

@@ -3,9 +3,7 @@
 #include "entity.h"
 #include <QTimer>
 
-#define MAP_WIDTH 30
-#define MAP_HEIGHT 20
-#define RESET_TIME 3500
+constexpr int RESET_TIME_MS = 3500;
 
 moveDirections leftTurn(moveDirections curr);
 moveDirections rightTurn(moveDirections curr);
