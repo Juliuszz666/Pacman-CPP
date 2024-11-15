@@ -3,7 +3,7 @@
 #include <QMessageBox>
 
 #define MUSIC_SRC QUrl("qrc:/mp3/testmusic.mp3")
-#define PERCENT_OF(X) (X/qreal(100.0))
+#define PERCENT_OF(X) (static_cast<double>(X)/qreal(100.0))
 
 constexpr int MIN_VOL = 0;
 constexpr int MAX_VOL = 100;

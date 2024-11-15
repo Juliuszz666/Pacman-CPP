@@ -84,6 +84,7 @@ void GamePage::connectTimers()
 
 void GamePage::updateLives()
 {
+    constexpr int HEART_POS_CO = 30;
     for (auto heart : heart_icons) {
         scene->removeItem(heart);
         delete heart;
@@ -91,7 +92,7 @@ void GamePage::updateLives()
     heart_icons.clear();
     for (int i = 0; i < pacman->getLife(); ++i) {
         QGraphicsPixmapItem *heart = new QGraphicsPixmapItem(QPixmap(HEART_FILE_STR).scaled(CELL_SIZE, CELL_SIZE));
-        heart->setPos(i * 30, -30);
+        heart->setPos(i * HEART_POS_CO, -HEART_POS_CO);
         scene->addItem(heart);
         heart_icons.append(heart);
     }
@@ -152,7 +153,7 @@ void GamePage::keyPressEvent(QKeyEvent *event)
     else if(key == Shared::keyBindings[MVLEFT])     new_dir = LEFT;
     else if(key == Shared::keyBindings[MVDOWN])     new_dir = DOWN;
     else if(key == Shared::keyBindings[MVRIGHT])    new_dir = RIGHT;
-    else if (key == Shared::keyBindings[PAUSE] && paused)
+    else if(key == Shared::keyBindings[PAUSE] &&    paused)
     {
         game_timer->start(TIMER_COLAPSE_TIME);
         paused = false;
