@@ -29,6 +29,7 @@ constexpr int PACMAN_POS_INDICATOR = 2;
 Pinky::Pinky(const int size, const std::pair<int, int> ini_pos, const std::pair<int,int> gate_pos) :
                Ghost(size, ini_pos, PINKY_FILE_STR_DEFAULT, gate_pos, PINKY_NAME)
 {
+    direction = RIGHT;
 }
 
 void Pinky::load_maze(const int map[MAP_HEIGHT][MAP_WIDTH])

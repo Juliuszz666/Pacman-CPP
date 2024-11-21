@@ -12,7 +12,6 @@ Ghost::Ghost(const int size,
              const QString& name) :
     Entity(size, ini_pos, img_filename),
     state(INEDIBLE),
-    out_of_spawn(false),
     spawn_pos(ini_pos),
     reset_timer(new QTimer(nullptr)),
     pacman_pos({}),
@@ -20,6 +19,11 @@ Ghost::Ghost(const int size,
     name(name),
     eaten(false)
 {}
+
+Ghost::~Ghost()
+{
+    delete reset_timer;
+}
 
 QString getDirStr(moveDirections direction)
 {
@@ -103,17 +107,6 @@ void Ghost::returnToSpawn()
         setState(INEDIBLE);
         eaten = false;
     });
-}
-
-bool Ghost::noSpawnGate()
-{
-    QList<QGraphicsItem*> collisions = collidingItems();
-    for(auto item : collisions)
-    {
-        Tile* check = dynamic_cast<Tile*>(item);
-        if(check && check->getType() == GHOST_GATE) return false;
-    }
-    return true;
 }
 
 moveDirections leftTurn(moveDirections curr)

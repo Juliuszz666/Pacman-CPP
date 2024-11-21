@@ -14,8 +14,6 @@ class Ghost : public Entity
 protected:
     GhostState state;
     QPoint pacman_pos;
-    bool noSpawnGate();
-    bool out_of_spawn;
     bool eaten;
     std::pair<int,int> spawn_pos;
     std::pair<int,int> gate_pos;
@@ -30,7 +28,7 @@ public:
     virtual void rotateEntity(qreal angle) override;
     virtual bool canMove(DirVectors speed_vec) override;
     Ghost(const int size, const std::pair<int, int> ini_pos, const QString &img_filename, const std::pair<int,int> g_pos, const QString& name);
-    ~Ghost() {delete reset_timer;}
+    ~Ghost();
 };
 
 #endif // GHOST_H

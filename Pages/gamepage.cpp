@@ -198,20 +198,23 @@ void GamePage::newLifeRestart()
 void GamePage::gameOver()
 {
     resetGame();
+    current_level = 1;
     Shared::pageIndexStack.push(GAME_OVER_PAGE);
     layout_ref->setCurrentIndex(GAME_OVER_PAGE);
+    emit gameOverSignal();
 }
 
 void GamePage::resetGame()
 {
-    current_level = 1;
-    foreach(QGraphicsItem *item, scene->items())
+    QList<QGraphicsItem*> scene_items = scene->items();
+    auto items_to_delete = std::partition(scene_items.begin(), scene_items.end(), [](QGraphicsItem* item) {
+        return dynamic_cast<Collectable*>(item) || dynamic_cast<Tile*>(item);
+    });
+    for (auto it = scene_items.begin(); it != items_to_delete; ++it)
     {
-        if (dynamic_cast<Collectable*>(item) || dynamic_cast<Tile*>(item))
-        {
-            scene->removeItem(item);
-            delete item;
-        }
+        scene->removeItem(*it);
+        delete *it;
+        *it = nullptr;
     }
     MapLoader::loadLevel(mapGrid, current_level);
     drawMapGrid();
@@ -227,8 +230,6 @@ void GamePage::resetGame()
 void GamePage::newLevel()
 {
     current_level++;
-    MapLoader::loadLevel(mapGrid, current_level);
-    drawMapGrid();
     resetGame();
     ui->lvlLabel->setText(CURRENT_LEVEL_STR);
 }

@@ -6,8 +6,8 @@
 class CollisionHandler
 {
 private:
-    void ghostCollisions(GamePage *page, const QList<QGraphicsItem*> &collisions);
-    void collectablesCollisions(GamePage *page, const QList<QGraphicsItem*> &collisions);
+    void ghostCollisions(GamePage *page, const QList<QGraphicsItem*> &collisions, int &flag);
+    void collectablesCollisions(GamePage *page, const QList<QGraphicsItem*> &collisions, int &flag);
 public:
     CollisionHandler() = default;
     ~CollisionHandler() = default;

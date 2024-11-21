@@ -2,8 +2,12 @@
 
 constexpr int GHOST_EATING_POINTS = 200;
 
+constexpr int NEW_LEVEL_FLAG = 0x1;
+constexpr int NEW_FILE_RESTART_FLAG = 0x2;
+constexpr int GAME_OVER_FLAG = 0x4;
 
-void CollisionHandler::collectablesCollisions(GamePage *game_instance, const QList<QGraphicsItem*> &collisions)
+
+void CollisionHandler::collectablesCollisions(GamePage *game_instance, const QList<QGraphicsItem*> &collisions, int & flag)
 {
     for (const auto &item : collisions)
     {
@@ -24,16 +28,16 @@ void CollisionHandler::collectablesCollisions(GamePage *game_instance, const QLi
     {
         if(game_instance->current_level == game_instance->max_level)
         {
-            game_instance->gameOver();
+            flag = GAME_OVER_FLAG;
         }
         else
         {
-            game_instance->newLevel();
+            flag = NEW_LEVEL_FLAG;
         }
     }
 }
 
-void CollisionHandler::ghostCollisions(GamePage *game_instance, const QList<QGraphicsItem*> &collisions)
+void CollisionHandler::ghostCollisions(GamePage *game_instance, const QList<QGraphicsItem*> &collisions, int &flag)
 {
     for (const auto &item : collisions)
     {
@@ -48,13 +52,11 @@ void CollisionHandler::ghostCollisions(GamePage *game_instance, const QList<QGra
             case INEDIBLE:
                 if(game_instance->pacman->loseLife())
                 {
-                    game_instance->newLifeRestart();
+                    flag = NEW_FILE_RESTART_FLAG;
                 }
                 else
                 {
-                    game_instance->gameOver();
-                    emit game_instance->gameOverSignal();
-                    return;
+                    flag = GAME_OVER_FLAG;
                 }
                 break;
             }
@@ -64,7 +66,21 @@ void CollisionHandler::ghostCollisions(GamePage *game_instance, const QList<QGra
 
 void CollisionHandler::handlePacmanCollisions(GamePage *game_instance)
 {
+    int flag = 0x0;
     QList<QGraphicsItem*> collisions = game_instance->pacman->collidingItems();
-    collectablesCollisions(game_instance, collisions);
-    ghostCollisions(game_instance, collisions);
+    ghostCollisions(game_instance, collisions, flag);
+    collectablesCollisions(game_instance, collisions, flag);
+    switch (flag) {
+    case GAME_OVER_FLAG:
+        game_instance->gameOver();
+        break;
+    case NEW_FILE_RESTART_FLAG:
+        game_instance->newLifeRestart();
+        break;
+    case NEW_LEVEL_FLAG:
+        game_instance->newLevel();
+        break;
+    default:
+        break;
+    }
 }
