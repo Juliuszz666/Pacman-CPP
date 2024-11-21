@@ -7,9 +7,9 @@ constexpr int NEW_FILE_RESTART_FLAG = 0x2;
 constexpr int GAME_OVER_FLAG = 0x4;
 
 
-void CollisionHandler::collectablesCollisions(GamePage *game_instance, const QList<QGraphicsItem*> &collisions, int & flag)
+void CollisionHandler::collectablesCollisions(GamePage *game_instance, QList<QGraphicsItem*> &collisions, int & flag)
 {
-    for (const auto &item : collisions)
+    for (auto &item : collisions)
     {
         Collectable* collectable = dynamic_cast<Collectable*>(item);
         if (collectable)
@@ -22,6 +22,8 @@ void CollisionHandler::collectablesCollisions(GamePage *game_instance, const QLi
             Shared::score += collectable->getScore();
             game_instance->scene->removeItem(item);
             game_instance->collectables.erase(it);
+            delete item;
+            item = nullptr;
         }
     }
     if(game_instance->collectables.empty())
