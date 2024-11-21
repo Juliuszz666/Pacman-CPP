@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Pacman</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../img/pacman.png</normaloff>../img/pacman.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">stylesheet.qss</string>
@@ -33,10 +37,10 @@
      <string notr="true"/>
     </property>
     <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
+     <enum>QFrame::Shape::NoFrame</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="welcome_page">
      <property name="styleSheet">

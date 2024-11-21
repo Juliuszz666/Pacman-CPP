@@ -3,7 +3,7 @@
 constexpr int GHOST_EATING_POINTS = 200;
 
 constexpr int NEW_LEVEL_FLAG = 0x1;
-constexpr int NEW_FILE_RESTART_FLAG = 0x2;
+constexpr int NEW_LIFE_RESTART_FLAG = 0x2;
 constexpr int GAME_OVER_FLAG = 0x4;
 
 
@@ -30,11 +30,11 @@ void CollisionHandler::collectablesCollisions(GamePage *game_instance, QList<QGr
     {
         if(game_instance->current_level == game_instance->max_level)
         {
-            flag = GAME_OVER_FLAG;
+            flag |= GAME_OVER_FLAG;
         }
         else
         {
-            flag = NEW_LEVEL_FLAG;
+            flag |= NEW_LEVEL_FLAG;
         }
     }
 }
@@ -54,11 +54,11 @@ void CollisionHandler::ghostCollisions(GamePage *game_instance, const QList<QGra
             case INEDIBLE:
                 if(game_instance->pacman->loseLife())
                 {
-                    flag = NEW_FILE_RESTART_FLAG;
+                    flag |= NEW_LIFE_RESTART_FLAG;
                 }
                 else
                 {
-                    flag = GAME_OVER_FLAG;
+                    flag |= GAME_OVER_FLAG;
                 }
                 break;
             }
@@ -72,17 +72,7 @@ void CollisionHandler::handlePacmanCollisions(GamePage *game_instance)
     QList<QGraphicsItem*> collisions = game_instance->pacman->collidingItems();
     ghostCollisions(game_instance, collisions, flag);
     collectablesCollisions(game_instance, collisions, flag);
-    switch (flag) {
-    case GAME_OVER_FLAG:
-        game_instance->gameOver();
-        break;
-    case NEW_FILE_RESTART_FLAG:
-        game_instance->newLifeRestart();
-        break;
-    case NEW_LEVEL_FLAG:
-        game_instance->newLevel();
-        break;
-    default:
-        break;
-    }
+    if(flag & GAME_OVER_FLAG) game_instance->gameOver();
+    if(flag & NEW_LIFE_RESTART_FLAG) game_instance->newLifeRestart();
+    if(flag & NEW_LEVEL_FLAG) game_instance->newLevel();
 }
