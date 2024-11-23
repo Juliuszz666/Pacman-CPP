@@ -7,7 +7,4 @@
 3. Possibility of many versions of map
 
 ## Settings and gameplay
-<video width="560" height="315" controls>
-  <source src="./ReadmeMP4/gameplay.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+![Video](./ReadmeMP4/gameplay.mp4)
