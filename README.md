@@ -8,5 +8,5 @@
 
 ## Settings and gameplay
 
-[Watch the video](./path/to/demo.mp4)
+[![Watch the video](./ReadmeMP4/gameplay.mp4)]
 
