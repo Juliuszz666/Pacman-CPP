@@ -1,4 +1,3 @@
-# Work in progres, so some errors/bugs can be found!!!
 # Pacman-CPP
  My Own Pacman Game made in Qt Framework in C++
 
