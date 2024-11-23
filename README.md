@@ -5,3 +5,6 @@
 1. Full fledged settings page
 2. Music
 3. Possibility of many versions of map
+
+## [Settings and gameplay](./ReadmeMP4/gameplay.mp4)
+
