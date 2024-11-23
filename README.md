@@ -7,6 +7,5 @@
 3. Possibility of many versions of map
 
 ## Settings and gameplay
-
-[![Watch the video](./ReadmeMP4/gameplay.mp4)]
+https://github.com/Juliuszz666/Pacman-CPP/blob/main/ReadmeMP4/gameplay.mp4
 
