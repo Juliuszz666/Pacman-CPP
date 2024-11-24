@@ -7,4 +7,5 @@
 3. Possibility of many versions of map
 
 ## Settings and gameplay
-![Video](./ReadmeMP4/gameplay.mp4)
+https://github.com/user-attachments/assets/afbc6614-6f8f-439a-a3c9-864724eefe1b
+
